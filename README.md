@@ -1,45 +1,37 @@
-<h1 align="center">testza 🍕</h1>
-<p align="center">Testza is like pizza for Go - you could live without it, but why should you?</p>
+<h1 align="center">Assert</h1>
+
+Fork of [testza](https://github.com/chalk-ai/assert) with some modifications.
+This version uses `comparable` from newer versions of golang, and drops the `Assert` prefix from the functions.
+It also runs `t.FailNow()` for `assert.NoError`.
 
 <p align="center">
 
-<a href="https://github.com/MarvinJWendt/testza/releases">
-<img src="https://img.shields.io/github/v/release/MarvinJWendt/testza?style=flat-square" alt="Latest Release">
+<a href="https://github.com/chalk-ai/assert/releases">
+<img src="https://img.shields.io/github/v/release/chalk-ai/assert?style=flat-square" alt="Latest Release">
 </a>
 
-<a href="https://codecov.io/gh/MarvinJWendt/testza" target="_blank">
-<img src="https://img.shields.io/github/actions/workflow/status/MarvinJWendt/testza/go.yml?label=tests&style=flat-square" alt="Tests">
+<a href="https://codecov.io/gh/chalk-ai/assert" target="_blank">
+<img src="https://img.shields.io/github/actions/workflow/status/chalk-ai/assert/go.yml?label=tests&style=flat-square" alt="Tests">
 </a>
 
-<a href="https://codecov.io/gh/MarvinJWendt/testza" target="_blank">
-<img src="https://img.shields.io/codecov/c/gh/MarvinJWendt/testza?color=magenta&logo=codecov&style=flat-square" alt="Coverage">
+<a href="https://codecov.io/gh/chalk-ai/assert" target="_blank">
+<img src="https://img.shields.io/codecov/c/gh/chalk-ai/assert?color=magenta&logo=codecov&style=flat-square" alt="Coverage">
 </a>
 
-<a href="https://codecov.io/gh/MarvinJWendt/testza">
-<!-- unittestcount:start --><img src="https://img.shields.io/badge/Unit_Tests-2956-magenta?style=flat-square" alt="Unit test count"><!-- unittestcount:end -->
+<a href="https://pkg.go.dev/github.com/chalk-ai/assert" target="_blank">
+<img src="https://pkg.go.dev/badge/github.com/chalk-ai/assert.svg" alt="Go Reference">
 </a>
-  
-<a href="https://pkg.go.dev/github.com/MarvinJWendt/testza" target="_blank">
-<img src="https://pkg.go.dev/badge/github.com/MarvinJWendt/testza.svg" alt="Go Reference">
-</a>
-
-<a href="https://goreportcard.com/report/github.com/MarvinJWendt/testza" target="_blank">
-<img src="https://goreportcard.com/badge/github.com/MarvinJWendt/testza?style=flat-square" alt="Go report">
-</a>  
 
 </p>
-
 
 ---
 
 <p align="center">
-<strong><a href="https://github.com/MarvinJWendt/testza#-installation">Get The Module</a></strong>
+<strong><a href="https://github.com/chalk-ai/assert#-installation">Get The Module</a></strong>
 |
-<strong><a href="https://github.com/MarvinJWendt/testza#-documentation" target="_blank">Documentation</a></strong>
+<strong><a href="https://github.com/chalk-ai/assert#-documentation" target="_blank">Documentation</a></strong>
 |
 <strong><a href="https://github.com/atomicgo/atomicgo/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a></strong>
-|
-<strong><a href="https://github.com/atomicgo/atomicgo/blob/main/CODE_OF_CONDUCT.md" target="_blank">Code of Conduct</a></strong>
 </p>
 
 ---
@@ -48,19 +40,11 @@
 
 <br/>
 
-<p align="center">
-<a href="https://discord.gg/vE2dNkfAmF">
-<img width="300" src="https://user-images.githubusercontent.com/31022056/158916278-4504b838-7ecb-4ab9-a900-7dc002aade78.png" alt="Join us on Discord!" />
-<br/>
-<b>Join us on Discord for support, discussions, updates and general talk!</b>
-</a>
-</p>
-
 ## 📦 Installation
 
 ```console
 # Execute this command inside your project
-go get github.com/MarvinJWendt/testza
+go get github.com/chalk-ai/assert
 ```
 <br/>
 <br/>
@@ -131,190 +115,190 @@ testza.FuzzStringRunTests(t, emailAddresses, func(t *testing.T, index int, str s
     <th>Module</th>
     <th>Methods</th>
   </tr><tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Settings">Settings</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Settings">Settings</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [SetColorsEnabled](https://github.com/MarvinJWendt/testza#SetColorsEnabled)
-  - [SetDiffContextLines](https://github.com/MarvinJWendt/testza#SetDiffContextLines)
-  - [SetLineNumbersEnabled](https://github.com/MarvinJWendt/testza#SetLineNumbersEnabled)
-  - [SetRandomSeed](https://github.com/MarvinJWendt/testza#SetRandomSeed)
-  - [SetShowStartupMessage](https://github.com/MarvinJWendt/testza#SetShowStartupMessage)
+  - [SetColorsEnabled](https://github.com/chalk-ai/assert#SetColorsEnabled)
+  - [SetDiffContextLines](https://github.com/chalk-ai/assert#SetDiffContextLines)
+  - [SetLineNumbersEnabled](https://github.com/chalk-ai/assert#SetLineNumbersEnabled)
+  - [SetRandomSeed](https://github.com/chalk-ai/assert#SetRandomSeed)
+  - [SetShowStartupMessage](https://github.com/chalk-ai/assert#SetShowStartupMessage)
 </td>
 
 </details>
 
 </tr>
 <tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Assert">Assert</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Assert">Assert</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [AssertCompletesIn](https://github.com/MarvinJWendt/testza#AssertCompletesIn)
-  - [AssertContains](https://github.com/MarvinJWendt/testza#AssertContains)
-  - [AssertDecreasing](https://github.com/MarvinJWendt/testza#AssertDecreasing)
-  - [AssertDirEmpty](https://github.com/MarvinJWendt/testza#AssertDirEmpty)
-  - [AssertDirExists](https://github.com/MarvinJWendt/testza#AssertDirExists)
-  - [AssertDirNotEmpty](https://github.com/MarvinJWendt/testza#AssertDirNotEmpty)
-  - [AssertEqual](https://github.com/MarvinJWendt/testza#AssertEqual)
-  - [AssertEqualValues](https://github.com/MarvinJWendt/testza#AssertEqualValues)
-  - [AssertErrorIs](https://github.com/MarvinJWendt/testza#AssertErrorIs)
-  - [AssertFalse](https://github.com/MarvinJWendt/testza#AssertFalse)
-  - [AssertFileExists](https://github.com/MarvinJWendt/testza#AssertFileExists)
-  - [AssertGreater](https://github.com/MarvinJWendt/testza#AssertGreater)
-  - [AssertGreaterOrEqual](https://github.com/MarvinJWendt/testza#AssertGreaterOrEqual)
-  - [AssertImplements](https://github.com/MarvinJWendt/testza#AssertImplements)
-  - [AssertInRange](https://github.com/MarvinJWendt/testza#AssertInRange)
-  - [AssertIncreasing](https://github.com/MarvinJWendt/testza#AssertIncreasing)
-  - [AssertKindOf](https://github.com/MarvinJWendt/testza#AssertKindOf)
-  - [AssertLen](https://github.com/MarvinJWendt/testza#AssertLen)
-  - [AssertLess](https://github.com/MarvinJWendt/testza#AssertLess)
-  - [AssertLessOrEqual](https://github.com/MarvinJWendt/testza#AssertLessOrEqual)
-  - [AssertNil](https://github.com/MarvinJWendt/testza#AssertNil)
-  - [AssertNoDirExists](https://github.com/MarvinJWendt/testza#AssertNoDirExists)
-  - [AssertNoError](https://github.com/MarvinJWendt/testza#AssertNoError)
-  - [AssertNoFileExists](https://github.com/MarvinJWendt/testza#AssertNoFileExists)
-  - [AssertNoSubset](https://github.com/MarvinJWendt/testza#AssertNoSubset)
-  - [AssertNotCompletesIn](https://github.com/MarvinJWendt/testza#AssertNotCompletesIn)
-  - [AssertNotContains](https://github.com/MarvinJWendt/testza#AssertNotContains)
-  - [AssertNotEqual](https://github.com/MarvinJWendt/testza#AssertNotEqual)
-  - [AssertNotEqualValues](https://github.com/MarvinJWendt/testza#AssertNotEqualValues)
-  - [AssertNotErrorIs](https://github.com/MarvinJWendt/testza#AssertNotErrorIs)
-  - [AssertNotImplements](https://github.com/MarvinJWendt/testza#AssertNotImplements)
-  - [AssertNotInRange](https://github.com/MarvinJWendt/testza#AssertNotInRange)
-  - [AssertNotKindOf](https://github.com/MarvinJWendt/testza#AssertNotKindOf)
-  - [AssertNotNil](https://github.com/MarvinJWendt/testza#AssertNotNil)
-  - [AssertNotNumeric](https://github.com/MarvinJWendt/testza#AssertNotNumeric)
-  - [AssertNotPanics](https://github.com/MarvinJWendt/testza#AssertNotPanics)
-  - [AssertNotRegexp](https://github.com/MarvinJWendt/testza#AssertNotRegexp)
-  - [AssertNotSameElements](https://github.com/MarvinJWendt/testza#AssertNotSameElements)
-  - [AssertNotUnique](https://github.com/MarvinJWendt/testza#AssertNotUnique)
-  - [AssertNotZero](https://github.com/MarvinJWendt/testza#AssertNotZero)
-  - [AssertNumeric](https://github.com/MarvinJWendt/testza#AssertNumeric)
-  - [AssertPanics](https://github.com/MarvinJWendt/testza#AssertPanics)
-  - [AssertRegexp](https://github.com/MarvinJWendt/testza#AssertRegexp)
-  - [AssertSameElements](https://github.com/MarvinJWendt/testza#AssertSameElements)
-  - [AssertSubset](https://github.com/MarvinJWendt/testza#AssertSubset)
-  - [AssertTestFails](https://github.com/MarvinJWendt/testza#AssertTestFails)
-  - [AssertTrue](https://github.com/MarvinJWendt/testza#AssertTrue)
-  - [AssertUnique](https://github.com/MarvinJWendt/testza#AssertUnique)
-  - [AssertZero](https://github.com/MarvinJWendt/testza#AssertZero)
+  - [AssertCompletesIn](https://github.com/chalk-ai/assert#AssertCompletesIn)
+  - [AssertContains](https://github.com/chalk-ai/assert#AssertContains)
+  - [AssertDecreasing](https://github.com/chalk-ai/assert#AssertDecreasing)
+  - [AssertDirEmpty](https://github.com/chalk-ai/assert#AssertDirEmpty)
+  - [AssertDirExists](https://github.com/chalk-ai/assert#AssertDirExists)
+  - [AssertDirNotEmpty](https://github.com/chalk-ai/assert#AssertDirNotEmpty)
+  - [AssertEqual](https://github.com/chalk-ai/assert#AssertEqual)
+  - [AssertEqualValues](https://github.com/chalk-ai/assert#AssertEqualValues)
+  - [AssertErrorIs](https://github.com/chalk-ai/assert#AssertErrorIs)
+  - [AssertFalse](https://github.com/chalk-ai/assert#AssertFalse)
+  - [AssertFileExists](https://github.com/chalk-ai/assert#AssertFileExists)
+  - [AssertGreater](https://github.com/chalk-ai/assert#AssertGreater)
+  - [AssertGreaterOrEqual](https://github.com/chalk-ai/assert#AssertGreaterOrEqual)
+  - [AssertImplements](https://github.com/chalk-ai/assert#AssertImplements)
+  - [AssertInRange](https://github.com/chalk-ai/assert#AssertInRange)
+  - [AssertIncreasing](https://github.com/chalk-ai/assert#AssertIncreasing)
+  - [AssertKindOf](https://github.com/chalk-ai/assert#AssertKindOf)
+  - [AssertLen](https://github.com/chalk-ai/assert#AssertLen)
+  - [AssertLess](https://github.com/chalk-ai/assert#AssertLess)
+  - [AssertLessOrEqual](https://github.com/chalk-ai/assert#AssertLessOrEqual)
+  - [AssertNil](https://github.com/chalk-ai/assert#AssertNil)
+  - [AssertNoDirExists](https://github.com/chalk-ai/assert#AssertNoDirExists)
+  - [AssertNoError](https://github.com/chalk-ai/assert#AssertNoError)
+  - [AssertNoFileExists](https://github.com/chalk-ai/assert#AssertNoFileExists)
+  - [AssertNoSubset](https://github.com/chalk-ai/assert#AssertNoSubset)
+  - [AssertNotCompletesIn](https://github.com/chalk-ai/assert#AssertNotCompletesIn)
+  - [AssertNotContains](https://github.com/chalk-ai/assert#AssertNotContains)
+  - [AssertNotEqual](https://github.com/chalk-ai/assert#AssertNotEqual)
+  - [AssertNotEqualValues](https://github.com/chalk-ai/assert#AssertNotEqualValues)
+  - [AssertNotErrorIs](https://github.com/chalk-ai/assert#AssertNotErrorIs)
+  - [AssertNotImplements](https://github.com/chalk-ai/assert#AssertNotImplements)
+  - [AssertNotInRange](https://github.com/chalk-ai/assert#AssertNotInRange)
+  - [AssertNotKindOf](https://github.com/chalk-ai/assert#AssertNotKindOf)
+  - [AssertNotNil](https://github.com/chalk-ai/assert#AssertNotNil)
+  - [AssertNotNumeric](https://github.com/chalk-ai/assert#AssertNotNumeric)
+  - [AssertNotPanics](https://github.com/chalk-ai/assert#AssertNotPanics)
+  - [AssertNotRegexp](https://github.com/chalk-ai/assert#AssertNotRegexp)
+  - [AssertNotSameElements](https://github.com/chalk-ai/assert#AssertNotSameElements)
+  - [AssertNotUnique](https://github.com/chalk-ai/assert#AssertNotUnique)
+  - [AssertNotZero](https://github.com/chalk-ai/assert#AssertNotZero)
+  - [AssertNumeric](https://github.com/chalk-ai/assert#AssertNumeric)
+  - [AssertPanics](https://github.com/chalk-ai/assert#AssertPanics)
+  - [AssertRegexp](https://github.com/chalk-ai/assert#AssertRegexp)
+  - [AssertSameElements](https://github.com/chalk-ai/assert#AssertSameElements)
+  - [AssertSubset](https://github.com/chalk-ai/assert#AssertSubset)
+  - [AssertTestFails](https://github.com/chalk-ai/assert#AssertTestFails)
+  - [AssertTrue](https://github.com/chalk-ai/assert#AssertTrue)
+  - [AssertUnique](https://github.com/chalk-ai/assert#AssertUnique)
+  - [AssertZero](https://github.com/chalk-ai/assert#AssertZero)
 </td>
 
 </details>
 
 </tr>
 <tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Capture">Capture</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Capture">Capture</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [CaptureStderr](https://github.com/MarvinJWendt/testza#CaptureStderr)
-  - [CaptureStdout](https://github.com/MarvinJWendt/testza#CaptureStdout)
-  - [CaptureStdoutAndStderr](https://github.com/MarvinJWendt/testza#CaptureStdoutAndStderr)
+  - [CaptureStderr](https://github.com/chalk-ai/assert#CaptureStderr)
+  - [CaptureStdout](https://github.com/chalk-ai/assert#CaptureStdout)
+  - [CaptureStdoutAndStderr](https://github.com/chalk-ai/assert#CaptureStdoutAndStderr)
 </td>
 
 </details>
 
 </tr>
 <tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Fuzz-Utils">Fuzz Utils</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Fuzz-Utils">Fuzz Utils</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [FuzzUtilDistinctSet](https://github.com/MarvinJWendt/testza#FuzzUtilDistinctSet)
-  - [FuzzUtilLimitSet](https://github.com/MarvinJWendt/testza#FuzzUtilLimitSet)
-  - [FuzzUtilMergeSets](https://github.com/MarvinJWendt/testza#FuzzUtilMergeSets)
-  - [FuzzUtilModifySet](https://github.com/MarvinJWendt/testza#FuzzUtilModifySet)
-  - [FuzzUtilRunTests](https://github.com/MarvinJWendt/testza#FuzzUtilRunTests)
+  - [FuzzUtilDistinctSet](https://github.com/chalk-ai/assert#FuzzUtilDistinctSet)
+  - [FuzzUtilLimitSet](https://github.com/chalk-ai/assert#FuzzUtilLimitSet)
+  - [FuzzUtilMergeSets](https://github.com/chalk-ai/assert#FuzzUtilMergeSets)
+  - [FuzzUtilModifySet](https://github.com/chalk-ai/assert#FuzzUtilModifySet)
+  - [FuzzUtilRunTests](https://github.com/chalk-ai/assert#FuzzUtilRunTests)
 </td>
 
 </details>
 
 </tr>
 <tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Fuzz-Booleans">Fuzz Booleans</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Fuzz-Booleans">Fuzz Booleans</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [FuzzBoolFull](https://github.com/MarvinJWendt/testza#FuzzBoolFull)
+  - [FuzzBoolFull](https://github.com/chalk-ai/assert#FuzzBoolFull)
 </td>
 
 </details>
 
 </tr>
 <tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Fuzz-Strings">Fuzz Strings</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Fuzz-Strings">Fuzz Strings</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [FuzzStringEmailAddresses](https://github.com/MarvinJWendt/testza#FuzzStringEmailAddresses)
-  - [FuzzStringEmpty](https://github.com/MarvinJWendt/testza#FuzzStringEmpty)
-  - [FuzzStringFull](https://github.com/MarvinJWendt/testza#FuzzStringFull)
-  - [FuzzStringGenerateRandom](https://github.com/MarvinJWendt/testza#FuzzStringGenerateRandom)
-  - [FuzzStringHtmlTags](https://github.com/MarvinJWendt/testza#FuzzStringHtmlTags)
-  - [FuzzStringLong](https://github.com/MarvinJWendt/testza#FuzzStringLong)
-  - [FuzzStringNumeric](https://github.com/MarvinJWendt/testza#FuzzStringNumeric)
-  - [FuzzStringUsernames](https://github.com/MarvinJWendt/testza#FuzzStringUsernames)
+  - [FuzzStringEmailAddresses](https://github.com/chalk-ai/assert#FuzzStringEmailAddresses)
+  - [FuzzStringEmpty](https://github.com/chalk-ai/assert#FuzzStringEmpty)
+  - [FuzzStringFull](https://github.com/chalk-ai/assert#FuzzStringFull)
+  - [FuzzStringGenerateRandom](https://github.com/chalk-ai/assert#FuzzStringGenerateRandom)
+  - [FuzzStringHtmlTags](https://github.com/chalk-ai/assert#FuzzStringHtmlTags)
+  - [FuzzStringLong](https://github.com/chalk-ai/assert#FuzzStringLong)
+  - [FuzzStringNumeric](https://github.com/chalk-ai/assert#FuzzStringNumeric)
+  - [FuzzStringUsernames](https://github.com/chalk-ai/assert#FuzzStringUsernames)
 </td>
 
 </details>
 
 </tr>
 <tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Fuzz-Float64s">Fuzz Float64s</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Fuzz-Float64s">Fuzz Float64s</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [FuzzFloat64Full](https://github.com/MarvinJWendt/testza#FuzzFloat64Full)
-  - [FuzzFloat64GenerateRandomNegative](https://github.com/MarvinJWendt/testza#FuzzFloat64GenerateRandomNegative)
-  - [FuzzFloat64GenerateRandomPositive](https://github.com/MarvinJWendt/testza#FuzzFloat64GenerateRandomPositive)
-  - [FuzzFloat64GenerateRandomRange](https://github.com/MarvinJWendt/testza#FuzzFloat64GenerateRandomRange)
+  - [FuzzFloat64Full](https://github.com/chalk-ai/assert#FuzzFloat64Full)
+  - [FuzzFloat64GenerateRandomNegative](https://github.com/chalk-ai/assert#FuzzFloat64GenerateRandomNegative)
+  - [FuzzFloat64GenerateRandomPositive](https://github.com/chalk-ai/assert#FuzzFloat64GenerateRandomPositive)
+  - [FuzzFloat64GenerateRandomRange](https://github.com/chalk-ai/assert#FuzzFloat64GenerateRandomRange)
 </td>
 
 </details>
 
 </tr>
 <tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Fuzz-Integers">Fuzz Integers</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Fuzz-Integers">Fuzz Integers</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [FuzzIntFull](https://github.com/MarvinJWendt/testza#FuzzIntFull)
-  - [FuzzIntGenerateRandomNegative](https://github.com/MarvinJWendt/testza#FuzzIntGenerateRandomNegative)
-  - [FuzzIntGenerateRandomPositive](https://github.com/MarvinJWendt/testza#FuzzIntGenerateRandomPositive)
-  - [FuzzIntGenerateRandomRange](https://github.com/MarvinJWendt/testza#FuzzIntGenerateRandomRange)
+  - [FuzzIntFull](https://github.com/chalk-ai/assert#FuzzIntFull)
+  - [FuzzIntGenerateRandomNegative](https://github.com/chalk-ai/assert#FuzzIntGenerateRandomNegative)
+  - [FuzzIntGenerateRandomPositive](https://github.com/chalk-ai/assert#FuzzIntGenerateRandomPositive)
+  - [FuzzIntGenerateRandomRange](https://github.com/chalk-ai/assert#FuzzIntGenerateRandomRange)
 </td>
 
 </details>
 
 </tr>
 <tr>
-<td><a href="https://github.com/MarvinJWendt/testza#Snapshot">Snapshot</a></td>
+<td><a href="https://github.com/chalk-ai/assert#Snapshot">Snapshot</a></td>
 <td>
 
 <details>
 <summary>Click to expand</summary>
 
-  - [SnapshotCreate](https://github.com/MarvinJWendt/testza#SnapshotCreate)
-  - [SnapshotCreateOrValidate](https://github.com/MarvinJWendt/testza#SnapshotCreateOrValidate)
-  - [SnapshotValidate](https://github.com/MarvinJWendt/testza#SnapshotValidate)
+  - [SnapshotCreate](https://github.com/chalk-ai/assert#SnapshotCreate)
+  - [SnapshotCreateOrValidate](https://github.com/chalk-ai/assert#SnapshotCreateOrValidate)
+  - [SnapshotValidate](https://github.com/chalk-ai/assert#SnapshotValidate)
 </td>
 
 </details>
@@ -1415,7 +1399,7 @@ FuzzStringHtmlTags returns a test set with different html tags.
 Example:
   - <script>
   - <script>alert('XSS')</script>
-  - <a href="https://github.com/MarvinJWendt/testza">link</a>
+  - <a href="https://github.com/chalk-ai/assert">link</a>
 
 #### FuzzStringLong
 
