@@ -563,6 +563,24 @@ func NoError(t testRunner, err error, msg ...any) {
 	}
 }
 
+// Error asserts that an error is not nil.
+//
+// When using a custom message, the same formatting as with fmt.Sprintf() is used.
+//
+// Example:
+//
+//	err := errors.New("hello world")
+//	assert.AssertError(t, err)
+func Error(t testRunner, err error, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	if err == nil {
+		internal.Fail(t, "An error that !!should not be nil!! is nil.", internal.Objects{}, msg...)
+	}
+}
+
 // Greater asserts that the first object is greater than the second.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
