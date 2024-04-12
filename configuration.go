@@ -1,4 +1,4 @@
-package testza
+package assert
 
 import (
 	"flag"
@@ -10,24 +10,24 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MarvinJWendt/testza/internal"
+	"github.com/chalk-ai/assert/internal"
 	"github.com/klauspost/cpuid/v2"
 	"github.com/pterm/pterm"
 )
 
 var randomSeed int64
-var showStartupMessage = true
+var showStartupMessage = false
 
 func init() {
 	initSync.Lock()
 	defer initSync.Unlock()
 
 	// Defining flags to show up in the help message
-	flag.Bool("testza.disable-color", false, "disables colored output")
-	flag.Bool("testza.disable-line-numbers", false, "disables line numbers in output")
-	flag.Bool("testza.disable-startup-message", false, "disable the startup message")
-	flag.Int64("testza.seed", 0, "seed used for random operations")
-	flag.Int("testza.diff-context-lines", 2, "sets the context line count in difference output")
+	flag.Bool("assert.disable-color", false, "disables colored output")
+	flag.Bool("assert.disable-line-numbers", false, "disables line numbers in output")
+	flag.Bool("assert.disable-startup-message", false, "disable the startup message")
+	flag.Int64("assert.seed", 0, "seed used for random operations")
+	flag.Int("assert.diff-context-lines", 2, "sets the context line count in difference output")
 
 	for i, arg := range os.Args {
 		// Check if the argument is a flag
@@ -45,7 +45,7 @@ func init() {
 		}
 
 		// Check for set flags and run the appropriate function
-		switch strings.TrimPrefix(arg, "--testza.") {
+		switch strings.TrimPrefix(arg, "--assert.") {
 		case "disable-color":
 			SetColorsEnabled(false)
 		case "disable-line-numbers":
@@ -74,7 +74,7 @@ func init() {
 
 		if showStartupMessage {
 			var startupMessage string
-			startupMessage += infoPrinter.WithLevel(1).Sprintln("Running tests with " + secondary("Testza"))
+			startupMessage += infoPrinter.WithLevel(1).Sprintln("Running tests with " + secondary("assert"))
 			startupMessage += infoPrinter.Sprintfln(`Using seed "%s" for random operations`, secondary(randomSeed))
 			startupMessage += infoPrinter.Sprintfln(`System info: OS=%s | arch=%s | cpu=%s | go=%s`, secondary(runtime.GOOS), secondary(runtime.GOARCH), secondary(cpuid.CPU.BrandName), secondary(runtime.Version()))
 			startupMessage += fmt.Sprintln()
@@ -83,16 +83,16 @@ func init() {
 	}()
 }
 
-// SetColorsEnabled controls if testza should print colored output.
+// SetColorsEnabled controls if assert should print colored output.
 // You should use this in the init() method of the package, which contains your tests.
 //
-// > This setting can also be set by the command line flag --testza.disable-color.
+// > This setting can also be set by the command line flag --assert.disable-color.
 //
 // Example:
 //
 //	init() {
-//	  testza.SetColorsEnabled(false) // Disable colored output
-//	  testza.SetColorsEnabled(true)  // Enable colored output
+//	  assert.SetColorsEnabled(false) // Disable colored output
+//	  assert.SetColorsEnabled(true)  // Enable colored output
 //	}
 func SetColorsEnabled(enabled bool) {
 	initSync.Lock()
@@ -106,7 +106,7 @@ func SetColorsEnabled(enabled bool) {
 }
 
 // GetColorsEnabled returns current value of ColorsEnabled setting.
-// ColorsEnabled controls if testza should print colored output.
+// ColorsEnabled controls if assert should print colored output.
 func GetColorsEnabled() bool {
 	return pterm.PrintColor
 }
@@ -114,13 +114,13 @@ func GetColorsEnabled() bool {
 // SetLineNumbersEnabled controls if line numbers should be printed in failing tests.
 // You should use this in the init() method of the package, which contains your tests.
 //
-// > This setting can also be set by the command line flag --testza.disable-line-numbers.
+// > This setting can also be set by the command line flag --assert.disable-line-numbers.
 //
 // Example:
 //
 //	init() {
-//	  testza.SetLineNumbersEnabled(false) // Disable line numbers
-//	  testza.SetLineNumbersEnabled(true)  // Enable line numbers
+//	  assert.SetLineNumbersEnabled(false) // Disable line numbers
+//	  assert.SetLineNumbersEnabled(true)  // Enable line numbers
 //	}
 func SetLineNumbersEnabled(enabled bool) {
 	initSync.Lock()
@@ -135,18 +135,18 @@ func GetLineNumbersEnabled() bool {
 	return internal.LineNumbersEnabled
 }
 
-// SetRandomSeed sets the seed for the random generator used in testza.
+// SetRandomSeed sets the seed for the random generator used in assert.
 // Using the same seed will result in the same random sequences each time and guarantee a reproducible test run.
 // Use this setting, if you want a 100% deterministic test.
 // You should use this in the init() method of the package, which contains your tests.
 //
-// > This setting can also be set by the command line flag --testza.seed.
+// > This setting can also be set by the command line flag --assert.seed.
 //
 // Example:
 //
 //	init() {
-//	  testza.SetRandomSeed(1337) // Set the seed to 1337
-//	  testza.SetRandomSeed(time.Now().UnixNano()) // Set the seed back to the current time (default | non-deterministic)
+//	  assert.SetRandomSeed(1337) // Set the seed to 1337
+//	  assert.SetRandomSeed(time.Now().UnixNano()) // Set the seed back to the current time (default | non-deterministic)
 //	}
 func SetRandomSeed(seed int64) {
 	initSync.Lock()
@@ -164,13 +164,13 @@ func GetRandomSeed() int64 {
 // SetShowStartupMessage controls if the startup message should be printed.
 // You should use this in the init() method of the package, which contains your tests.
 //
-// > This setting can also be set by the command line flag --testza.disable-startup-message.
+// > This setting can also be set by the command line flag --assert.disable-startup-message.
 //
 // Example:
 //
 //	init() {
-//	  testza.SetShowStartupMessage(false) // Disable the startup message
-//	  testza.SetShowStartupMessage(true)  // Enable the startup message
+//	  assert.SetShowStartupMessage(false) // Disable the startup message
+//	  assert.SetShowStartupMessage(true)  // Enable the startup message
 //	}
 func SetShowStartupMessage(show bool) {
 	initSync.Lock()
@@ -189,13 +189,13 @@ func GetShowStartupMessage() bool {
 // If set to -1 it will show full diff.
 // You should use this in the init() method of the package, which contains your tests.
 //
-// > This setting can also be set by the command line flag --testza.diff-context-lines.
+// > This setting can also be set by the command line flag --assert.diff-context-lines.
 //
 // Example:
 //
 //	init() {
-//	  testza.SetDiffContextLines(-1) // Show all diff lines
-//	  testza.SetDiffContextLines(3)  // Show 3 lines around every changed line
+//	  assert.SetDiffContextLines(-1) // Show all diff lines
+//	  assert.SetDiffContextLines(3)  // Show 3 lines around every changed line
 //	}
 func SetDiffContextLines(lines int) {
 	initSync.Lock()

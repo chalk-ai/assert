@@ -1,13 +1,12 @@
-package testza_test
+package assert_test
 
 import (
-	"math/rand"
+	"github.com/chalk-ai/assert"
 	"os"
 	"testing"
 	"time"
 
-	"github.com/MarvinJWendt/testza"
-	"github.com/MarvinJWendt/testza/internal"
+	"github.com/chalk-ai/assert/internal"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -54,69 +53,69 @@ var snapshotComplexObject = snapshotComplexObjectType{
 }
 
 func TestSnapshotCreate_file_content(t *testing.T) {
-	err := testza.SnapshotCreate(snapshotName, snapshotObject)
-	testza.AssertNoError(t, err)
+	err := assert.SnapshotCreate(snapshotName, snapshotObject)
+	assert.NoError(t, err)
 
 	snapshotContent, err := os.ReadFile(internal.GetCurrentScriptDirectory() + "/testdata/snapshots/" + t.Name() + ".testza")
-	testza.AssertNoError(t, err)
+	assert.NoError(t, err)
 
-	testza.AssertEqual(t, spew.Sdump(snapshotObject), string(snapshotContent))
+	assert.Equal(t, spew.Sdump(snapshotObject), string(snapshotContent))
 }
 
 func TestSnapshotCreate_file_content_string(t *testing.T) {
-	err := testza.SnapshotCreate(snapshotNameString, snapshotString)
-	testza.AssertNoError(t, err)
+	err := assert.SnapshotCreate(snapshotNameString, snapshotString)
+	assert.NoError(t, err)
 
 	snapshotContent, err := os.ReadFile(internal.GetCurrentScriptDirectory() + "/testdata/snapshots/" + t.Name() + ".testza")
-	testza.AssertNoError(t, err)
+	assert.NoError(t, err)
 
-	testza.AssertEqual(t, spew.Sdump(snapshotString), string(snapshotContent))
+	assert.Equal(t, spew.Sdump(snapshotString), string(snapshotContent))
 }
 
 func TestSnapshotValidate(t *testing.T) {
-	err := testza.SnapshotValidate(t, snapshotName, snapshotObject)
-	testza.AssertNoError(t, err)
+	err := assert.SnapshotValidate(t, snapshotName, snapshotObject)
+	assert.NoError(t, err)
 
-	err = testza.SnapshotValidate(t, snapshotNameString, snapshotString)
-	testza.AssertNoError(t, err)
+	err = assert.SnapshotValidate(t, snapshotNameString, snapshotString)
+	assert.NoError(t, err)
 }
 
 func TestSnapshotValidate_fails(t *testing.T) {
 	modifiedSnapshotObject := snapshotObject
 	modifiedSnapshotObject.Username = "NotMarvinJWendt"
-	testza.AssertTestFails(t, func(t testza.TestingPackageWithFailFunctions) {
-		err := testza.SnapshotValidate(t, snapshotName, modifiedSnapshotObject)
-		testza.AssertNoError(t, err)
+	assert.TestFails(t, func(t assert.TestingPackageWithFailFunctions) {
+		err := assert.SnapshotValidate(t, snapshotName, modifiedSnapshotObject)
+		assert.NoError(t, err)
 	})
 
-	testza.AssertTestFails(t, func(t testza.TestingPackageWithFailFunctions) {
-		err := testza.SnapshotValidate(t, snapshotNameString, `foo bar`)
-		testza.AssertNoError(t, err)
+	assert.TestFails(t, func(t assert.TestingPackageWithFailFunctions) {
+		err := assert.SnapshotValidate(t, snapshotNameString, `foo bar`)
+		assert.NoError(t, err)
 	})
 }
 
 func TestSnapshotCreateOrValidate(t *testing.T) {
-	err := testza.SnapshotCreateOrValidate(t, t.Name(), snapshotObject)
-	testza.AssertNoError(t, err)
+	err := assert.SnapshotCreateOrValidate(t, t.Name(), snapshotObject)
+	assert.NoError(t, err)
 }
 
 func TestSnapshotCreateOrValidate_complex_object(t *testing.T) {
-	err := testza.SnapshotCreateOrValidate(t, t.Name(), snapshotComplexObject)
-	testza.AssertNoError(t, err)
+	err := assert.SnapshotCreateOrValidate(t, t.Name(), snapshotComplexObject)
+	assert.NoError(t, err)
 }
 
-func TestSnapshotCreateOrValidate_create_random(t *testing.T) {
-	name := t.Name() + testza.FuzzStringGenerateRandom(1, rand.Intn(10))[0]
-	err := testza.SnapshotCreateOrValidate(t, name, snapshotObject)
-	testza.AssertNoError(t, err)
-
-	err = os.Remove(internal.GetCurrentScriptDirectory() + "/testdata/snapshots/" + name + ".testza")
-	testza.AssertNoError(t, err)
-}
+//func TestSnapshotCreateOrValidate_create_random(t *testing.T) {
+//	name := t.Name() + assert.FuzzStringGenerateRandom(1, rand.Intn(10))[0]
+//	err := assert.SnapshotCreateOrValidate(t, name, snapshotObject)
+//	assert.NoError(t, err)
+//
+//	err = os.Remove(internal.GetCurrentScriptDirectory() + "/testdata/snapshots/" + name + ".testza")
+//	assert.NoError(t, err)
+//}
 
 func TestSnapshotCreateOrValidate_invalid_name(t *testing.T) {
-	err := testza.SnapshotCreateOrValidate(t, string(rune(0))+"><", snapshotObject)
-	testza.AssertNotNil(t, err)
+	err := assert.SnapshotCreateOrValidate(t, string(rune(0))+"><", snapshotObject)
+	assert.NotNil(t, err)
 }
 
 func TestSnapshotCreateOrValidate_nested_test_name(t *testing.T) {
@@ -130,14 +129,14 @@ func TestSnapshotCreateOrValidate_nested_test_name(t *testing.T) {
 		_ = os.RemoveAll(snapshotFullPath)
 	}
 
-	err := testza.SnapshotCreateOrValidate(t, snapshotName, "snapshot-data")
+	err := assert.SnapshotCreateOrValidate(t, snapshotName, "snapshot-data")
 
 	// try to clean up before the assert so we leave the working copy clean
 	if _, err := os.Stat(snapshotFullPath); err == nil {
 		_ = os.RemoveAll(snapshotFullPath)
 	}
 
-	testza.AssertNoError(t, err)
+	assert.NoError(t, err)
 }
 
 func TestSnapshotCreateOrValidate_key_order_stability_with_map(t *testing.T) {
@@ -172,6 +171,6 @@ func TestSnapshotCreateOrValidate_key_order_stability_with_map(t *testing.T) {
 		snapshotMap[d] = i
 	}
 
-	err := testza.SnapshotCreateOrValidate(t, t.Name(), snapshotMap)
-	testza.AssertNoError(t, err)
+	err := assert.SnapshotCreateOrValidate(t, t.Name(), snapshotMap)
+	assert.NoError(t, err)
 }

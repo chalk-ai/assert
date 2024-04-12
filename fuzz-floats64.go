@@ -1,4 +1,4 @@
-package testza
+package assert
 
 import (
 	"math"
@@ -18,12 +18,13 @@ func FuzzFloat64Full() (floats []float64) {
 
 // FuzzFloat64GenerateRandomRange generates random positive integers with a maximum of max.
 // If the maximum is 0, or below, the maximum will be set to math.MaxInt64.
-func FuzzFloat64GenerateRandomRange(count int, min, max float64) (floats []float64) {
+func FuzzFloat64GenerateRandomRange(count int, min, max float64) []float64 {
+	var floats []float64
 	for i := 0; i < count; i++ {
 		floats = append(floats, min+rand.Float64()*(max-min))
 	}
 
-	return
+	return floats
 }
 
 // FuzzFloat64GenerateRandomPositive generates random positive integers with a maximum of max.

@@ -1,17 +1,17 @@
-package testza
+package assert
 
 import (
 	"atomicgo.dev/assert"
 	"errors"
 	"fmt"
+	"golang.org/x/exp/constraints"
 	"os"
 	"reflect"
-	"strconv"
 	"time"
 
 	"github.com/pterm/pterm"
 
-	"github.com/MarvinJWendt/testza/internal"
+	"github.com/chalk-ai/assert/internal"
 )
 
 type testMock struct {
@@ -53,18 +53,18 @@ func (m *testMock) Fatalf(format string, args ...any) {
 	m.fail(fmt.Sprintf(format, args...))
 }
 
-// AssertKindOf asserts that the object is a type of kind exptectedKind.
+// KindOf asserts that the object is a type of kind exptectedKind.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertKindOf(t, reflect.Slice, []int{1,2,3})
-//	testza.AssertKindOf(t, reflect.Slice, []string{"Hello", "World"})
-//	testza.AssertKindOf(t, reflect.Int, 1337)
-//	testza.AssertKindOf(t, reflect.Bool, true)
-//	testza.AssertKindOf(t, reflect.Map, map[string]bool{})
-func AssertKindOf(t testRunner, expectedKind reflect.Kind, object any, msg ...any) {
+//	assert.AssertKindOf(t, reflect.Slice, []int{1,2,3})
+//	assert.AssertKindOf(t, reflect.Slice, []string{"Hello", "World"})
+//	assert.AssertKindOf(t, reflect.Int, 1337)
+//	assert.AssertKindOf(t, reflect.Bool, true)
+//	assert.AssertKindOf(t, reflect.Map, map[string]bool{})
+func KindOf(t testRunner, expectedKind reflect.Kind, object any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -78,18 +78,18 @@ func AssertKindOf(t testRunner, expectedKind reflect.Kind, object any, msg ...an
 	}
 }
 
-// AssertNotKindOf asserts that the object is not a type of kind `kind`.
+// NotKindOf asserts that the object is not a type of kind `kind`.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotKindOf(t, reflect.Slice, "Hello, World")
-//	testza.AssertNotKindOf(t, reflect.Slice, true)
-//	testza.AssertNotKindOf(t, reflect.Int, 13.37)
-//	testza.AssertNotKindOf(t, reflect.Bool, map[string]bool{})
-//	testza.AssertNotKindOf(t, reflect.Map, false)
-func AssertNotKindOf(t testRunner, kind reflect.Kind, object any, msg ...any) {
+//	assert.AssertNotKindOf(t, reflect.Slice, "Hello, World")
+//	assert.AssertNotKindOf(t, reflect.Slice, true)
+//	assert.AssertNotKindOf(t, reflect.Int, 13.37)
+//	assert.AssertNotKindOf(t, reflect.Bool, map[string]bool{})
+//	assert.AssertNotKindOf(t, reflect.Map, false)
+func NotKindOf(t testRunner, kind reflect.Kind, object any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -106,7 +106,7 @@ func AssertNotKindOf(t testRunner, kind reflect.Kind, object any, msg ...any) {
 	}
 }
 
-// AssertNumeric asserts that the object is a numeric type.
+// Numeric asserts that the object is a numeric type.
 // Numeric types are:
 // Int, Int8, Int16, Int32, Int64, Float32, Float64, Uint, Uint8, Uint16, Uint32, Uint64, Complex64 and Complex128.
 //
@@ -114,16 +114,16 @@ func AssertNotKindOf(t testRunner, kind reflect.Kind, object any, msg ...any) {
 //
 // Example:
 //
-//	testza.AssertNumeric(t, 123)
-//	testza.AssertNumeric(t, 1.23)
-//	testza.AssertNumeric(t, uint(123))
-func AssertNumeric(t testRunner, object any, msg ...any) {
+//	assert.AssertNumeric(t, 123)
+//	assert.AssertNumeric(t, 1.23)
+//	assert.AssertNumeric(t, uint(123))
+func Numeric(t testRunner, object any, msg ...any) {
 	if !assert.Number(object) {
 		internal.Fail(t, "An object that !!should be a number!! is not of a numeric type.", internal.NewObjectsSingleUnknown(object), msg...)
 	}
 }
 
-// AssertNotNumeric checks if the object is not a numeric type.
+// NotNumeric checks if the object is not a numeric type.
 // Numeric types are:
 // Int, Int8, Int16, Int32, Int64, Float32, Float64, Uint, Uint8, Uint16, Uint32, Uint64, Complex64 and Complex128.
 //
@@ -131,24 +131,24 @@ func AssertNumeric(t testRunner, object any, msg ...any) {
 //
 // Example:
 //
-//	testza.AssertNotNumeric(t, true)
-//	testza.AssertNotNumeric(t, "123")
-func AssertNotNumeric(t testRunner, object any, msg ...any) {
+//	assert.AssertNotNumeric(t, true)
+//	assert.AssertNotNumeric(t, "123")
+func NotNumeric(t testRunner, object any, msg ...any) {
 	if assert.Number(object) {
 		internal.Fail(t, "An object that !!should not be a number!! is of a numeric type.", internal.NewObjectsSingleUnknown(object), msg...)
 	}
 }
 
-// AssertZero asserts that the value is the zero value for it's type.
+// Zero asserts that the value is the zero value for it's type.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertZero(t, 0)
-//	testza.AssertZero(t, false)
-//	testza.AssertZero(t, "")
-func AssertZero(t testRunner, value any, msg ...any) {
+//	assert.AssertZero(t, 0)
+//	assert.AssertZero(t, false)
+//	assert.AssertZero(t, "")
+func Zero(t testRunner, value any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -158,16 +158,16 @@ func AssertZero(t testRunner, value any, msg ...any) {
 	}
 }
 
-// AssertNotZero asserts that the value is not the zero value for it's type.
+// NotZero asserts that the value is not the zero value for it's type.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotZero(t, 1337)
-//	testza.AssertNotZero(t, true)
-//	testza.AssertNotZero(t, "Hello, World")
-func AssertNotZero(t testRunner, value any, msg ...any) {
+//	assert.AssertNotZero(t, 1337)
+//	assert.AssertNotZero(t, true)
+//	assert.AssertNotZero(t, "Hello, World")
+func NotZero(t testRunner, value any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -177,15 +177,15 @@ func AssertNotZero(t testRunner, value any, msg ...any) {
 	}
 }
 
-// AssertEqual asserts that two objects are equal.
+// Equal asserts that two objects are equal.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertEqual(t, "Hello, World!", "Hello, World!")
-//	testza.AssertEqual(t, true, true)
-func AssertEqual(t testRunner, expected any, actual any, msg ...any) {
+//	assert.AssertEqual(t, "Hello, World!", "Hello, World!")
+//	assert.AssertEqual(t, true, true)
+func Equal(t testRunner, expected any, actual any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -195,15 +195,15 @@ func AssertEqual(t testRunner, expected any, actual any, msg ...any) {
 	}
 }
 
-// AssertNotEqual asserts that two objects are not equal.
+// NotEqual asserts that two objects are not equal.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotEqual(t, true, false)
-//	testza.AssertNotEqual(t, "Hello", "World")
-func AssertNotEqual(t testRunner, expected any, actual any, msg ...any) {
+//	assert.AssertNotEqual(t, true, false)
+//	assert.AssertNotEqual(t, "Hello", "World")
+func NotEqual(t testRunner, expected any, actual any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -220,16 +220,16 @@ func AssertNotEqual(t testRunner, expected any, actual any, msg ...any) {
 	}
 }
 
-// AssertEqualValues asserts that two objects have equal values.
+// EqualValues asserts that two objects have equal values.
 // The order of the values is also validated.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertEqualValues(t, []string{"Hello", "World"}, []string{"Hello", "World"})
-//	testza.AssertEqualValues(t, []int{1,2}, []int{1,2})
-//	testza.AssertEqualValues(t, []int{1,2}, []int{2,1}) // FAILS (wrong order)
+//	assert.AssertEqualValues(t, []string{"Hello", "World"}, []string{"Hello", "World"})
+//	assert.AssertEqualValues(t, []int{1,2}, []int{1,2})
+//	assert.AssertEqualValues(t, []int{1,2}, []int{2,1}) // FAILS (wrong order)
 //
 // Comparing struct values:
 //
@@ -245,8 +245,8 @@ func AssertNotEqual(t testRunner, expected any, actual any, msg ...any) {
 //	  Gender: "male",
 //	}
 //
-//	testza.AssertEqualValues(t, person1, person2)
-func AssertEqualValues(t testRunner, expected any, actual any, msg ...any) {
+//	assert.AssertEqualValues(t, person1, person2)
+func EqualValues(t testRunner, expected any, actual any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -256,13 +256,13 @@ func AssertEqualValues(t testRunner, expected any, actual any, msg ...any) {
 	}
 }
 
-// AssertNotEqualValues asserts that two objects do not have equal values.
+// NotEqualValues asserts that two objects do not have equal values.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotEqualValues(t, []int{1,2}, []int{3,4})
+//	assert.AssertNotEqualValues(t, []int{1,2}, []int{3,4})
 //
 // Comparing struct values:
 //
@@ -278,8 +278,8 @@ func AssertEqualValues(t testRunner, expected any, actual any, msg ...any) {
 //	  Gender: "female", // <-- CHANGED
 //	}
 //
-//	testza.AssertNotEqualValues(t, person1, person2)
-func AssertNotEqualValues(t testRunner, expected any, actual any, msg ...any) {
+//	assert.AssertNotEqualValues(t, person1, person2)
+func NotEqualValues(t testRunner, expected any, actual any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -289,17 +289,17 @@ func AssertNotEqualValues(t testRunner, expected any, actual any, msg ...any) {
 	}
 }
 
-// AssertTrue asserts that an expression or object resolves to true.
+// True asserts that an expression or object resolves to true.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertTrue(t, true)
-//	testza.AssertTrue(t, 1 == 1)
-//	testza.AssertTrue(t, 2 != 3)
-//	testza.AssertTrue(t, 1 > 0 && 4 < 5)
-func AssertTrue(t testRunner, value any, msg ...any) {
+//	assert.AssertTrue(t, true)
+//	assert.AssertTrue(t, 1 == 1)
+//	assert.AssertTrue(t, 2 != 3)
+//	assert.AssertTrue(t, 1 > 0 && 4 < 5)
+func True(t testRunner, value any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -309,17 +309,17 @@ func AssertTrue(t testRunner, value any, msg ...any) {
 	}
 }
 
-// AssertFalse asserts that an expression or object resolves to false.
+// False asserts that an expression or object resolves to false.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertFalse(t, false)
-//	testza.AssertFalse(t, 1 == 2)
-//	testza.AssertFalse(t, 2 != 2)
-//	testza.AssertFalse(t, 1 > 5 && 4 < 0)
-func AssertFalse(t testRunner, value any, msg ...any) {
+//	assert.AssertFalse(t, false)
+//	assert.AssertFalse(t, 1 == 2)
+//	assert.AssertFalse(t, 2 != 2)
+//	assert.AssertFalse(t, 1 > 5 && 4 < 0)
+func False(t testRunner, value any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -329,15 +329,15 @@ func AssertFalse(t testRunner, value any, msg ...any) {
 	}
 }
 
-// AssertImplements asserts that an objects implements an interface.
+// Implements asserts that an objects implements an interface.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertImplements(t, (*YourInterface)(nil), new(YourObject))
-//	testza.AssertImplements(t, (*fmt.Stringer)(nil), new(types.Const)) => pass
-func AssertImplements(t testRunner, interfaceObject, object any, msg ...any) {
+//	assert.AssertImplements(t, (*YourInterface)(nil), new(YourObject))
+//	assert.AssertImplements(t, (*fmt.Stringer)(nil), new(types.Const)) => pass
+func Implements(t testRunner, interfaceObject, object any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -347,15 +347,15 @@ func AssertImplements(t testRunner, interfaceObject, object any, msg ...any) {
 	}
 }
 
-// AssertNotImplements asserts that an object does not implement an interface.
+// NotImplements asserts that an object does not implement an interface.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotImplements(t, (*YourInterface)(nil), new(YourObject))
-//	testza.AssertNotImplements(t, (*fmt.Stringer)(nil), new(types.Const)) => fail, because types.Const does implement fmt.Stringer.
-func AssertNotImplements(t testRunner, interfaceObject, object any, msg ...any) {
+//	assert.AssertNotImplements(t, (*YourInterface)(nil), new(YourObject))
+//	assert.AssertNotImplements(t, (*fmt.Stringer)(nil), new(types.Const)) => fail, because types.Const does implement fmt.Stringer.
+func NotImplements(t testRunner, interfaceObject, object any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -365,16 +365,16 @@ func AssertNotImplements(t testRunner, interfaceObject, object any, msg ...any) 
 	}
 }
 
-// AssertContains asserts that a string/list/array/slice/map contains the specified element.
+// Contains asserts that a string/list/array/slice/map contains the specified element.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertContains(t, []int{1,2,3}, 2)
-//	testza.AssertContains(t, []string{"Hello", "World"}, "World")
-//	testza.AssertContains(t, "Hello, World!", "World")
-func AssertContains(t testRunner, object, element any, msg ...any) {
+//	assert.AssertContains(t, []int{1,2,3}, 2)
+//	assert.AssertContains(t, []string{"Hello", "World"}, "World")
+//	assert.AssertContains(t, "Hello, World!", "World")
+func Contains(t testRunner, object, element any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -387,15 +387,15 @@ func AssertContains(t testRunner, object, element any, msg ...any) {
 	}
 }
 
-// AssertNotContains asserts that a string/list/array/slice/map does not contain the specified element.
+// NotContains asserts that a string/list/array/slice/map does not contain the specified element.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotContains(t, []string{"Hello", "World"}, "Spaceship")
-//	testza.AssertNotContains(t, "Hello, World!", "Spaceship")
-func AssertNotContains(t testRunner, object, element any, msg ...any) {
+//	assert.AssertNotContains(t, []string{"Hello", "World"}, "Spaceship")
+//	assert.AssertNotContains(t, "Hello, World!", "Spaceship")
+func NotContains(t testRunner, object, element any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -408,17 +408,17 @@ func AssertNotContains(t testRunner, object, element any, msg ...any) {
 	}
 }
 
-// AssertPanics asserts that a function panics.
+// Panics asserts that a function panics.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertPanics(t, func() {
+//	assert.AssertPanics(t, func() {
 //		// ...
 //		panic("some panic")
 //	}) // => PASS
-func AssertPanics(t testRunner, f func(), msg ...any) {
+func Panics(t testRunner, f func(), msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -428,16 +428,16 @@ func AssertPanics(t testRunner, f func(), msg ...any) {
 	}
 }
 
-// AssertNotPanics asserts that a function does not panic.
+// NotPanics asserts that a function does not panic.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotPanics(t, func() {
+//	assert.AssertNotPanics(t, func() {
 //		// some code that does not call a panic...
 //	}) // => PASS
-func AssertNotPanics(t testRunner, f func(), msg ...any) {
+func NotPanics(t testRunner, f func(), msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -447,14 +447,14 @@ func AssertNotPanics(t testRunner, f func(), msg ...any) {
 	}
 }
 
-// AssertNil asserts that an object is nil.
+// Nil asserts that an object is nil.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNil(t, nil)
-func AssertNil(t testRunner, object any, msg ...any) {
+//	assert.AssertNil(t, nil)
+func Nil(t testRunner, object any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -464,16 +464,16 @@ func AssertNil(t testRunner, object any, msg ...any) {
 	}
 }
 
-// AssertNotNil asserts that an object is not nil.
+// NotNil asserts that an object is not nil.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotNil(t, true)
-//	testza.AssertNotNil(t, "Hello, World!")
-//	testza.AssertNotNil(t, 0)
-func AssertNotNil(t testRunner, object any, msg ...any) {
+//	assert.AssertNotNil(t, true)
+//	assert.AssertNotNil(t, "Hello, World!")
+//	assert.AssertNotNil(t, 0)
+func NotNil(t testRunner, object any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -483,7 +483,7 @@ func AssertNotNil(t testRunner, object any, msg ...any) {
 	}
 }
 
-// AssertCompletesIn asserts that a function completes in a given time.
+// CompletesIn asserts that a function completes in a given time.
 // Use this function to test that functions do not take too long to complete.
 //
 // NOTE: Every system takes a different amount of time to complete a function.
@@ -493,10 +493,10 @@ func AssertNotNil(t testRunner, object any, msg ...any) {
 //
 // Example:
 //
-//	testza.AssertCompletesIn(t, 2 * time.Second, func() {
+//	assert.AssertCompletesIn(t, 2 * time.Second, func() {
 //		// some code that should take less than 2 seconds...
 //	}) // => PASS
-func AssertCompletesIn(t testRunner, duration time.Duration, f func(), msg ...any) {
+func CompletesIn(t testRunner, duration time.Duration, f func(), msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -506,7 +506,7 @@ func AssertCompletesIn(t testRunner, duration time.Duration, f func(), msg ...an
 	}
 }
 
-// AssertNotCompletesIn asserts that a function does not complete in a given time.
+// NotCompletesIn asserts that a function does not complete in a given time.
 // Use this function to test that functions do not complete to quickly.
 // For example if your database connection completes in under a millisecond, there might be something wrong.
 //
@@ -517,11 +517,11 @@ func AssertCompletesIn(t testRunner, duration time.Duration, f func(), msg ...an
 //
 // Example:
 //
-//	testza.AssertNotCompletesIn(t, 2 * time.Second, func() {
+//	assert.AssertNotCompletesIn(t, 2 * time.Second, func() {
 //		// some code that should take more than 2 seconds...
 //		time.Sleep(3 * time.Second)
 //	}) // => PASS
-func AssertNotCompletesIn(t testRunner, duration time.Duration, f func(), msg ...any) {
+func NotCompletesIn(t testRunner, duration time.Duration, f func(), msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -531,15 +531,15 @@ func AssertNotCompletesIn(t testRunner, duration time.Duration, f func(), msg ..
 	}
 }
 
-// AssertNoError asserts that an error is nil.
+// NoError asserts that an error is nil.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
 //	err := nil
-//	testza.AssertNoError(t, err)
-func AssertNoError(t testRunner, err error, msg ...any) {
+//	assert.AssertNoError(t, err)
+func NoError(t testRunner, err error, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -559,82 +559,78 @@ func AssertNoError(t testRunner, err error, msg ...any) {
 				Data:      err,
 				DataStyle: pterm.NewStyle(pterm.FgRed),
 			}}, msg...)
+		t.FailNow()
 	}
 }
 
-// AssertGreater asserts that the first object is greater than the second.
+// Greater asserts that the first object is greater than the second.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertGreater(t, 5, 1)
-//	testza.AssertGreater(t, 10, -10)
-func AssertGreater(t testRunner, object1, object2 any, msg ...any) {
+//	assert.AssertGreater(t, 5, 1)
+//	assert.AssertGreater(t, 10, -10)
+func Greater[T constraints.Ordered](t testRunner, object1, object2 T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
 
-	v1, err := strconv.ParseFloat(fmt.Sprint(object1), 64)
-	v2, err2 := strconv.ParseFloat(fmt.Sprint(object2), 64)
-
-	if err != nil || err2 != nil {
-		internal.Fail(t, "An error occurred while parsing the objects as numbers.", internal.NewObjectsUnknown(object1, object2), msg...)
-	}
-
-	if !(v1 > v2) {
-		internal.Fail(t, "An object that !!should be greater!! than the second object is not.", internal.Objects{{Name: "Object 1", Data: object1}, {Name: "Should be greater than object 2", Data: object2}}, msg...)
+	if object1 <= object2 {
+		internal.Fail(
+			t,
+			"An object that !!should be greater!! than the second object is not.",
+			internal.Objects{
+				{Name: "Object 1", Data: object1},
+				{Name: "Should be greater than object 2", Data: object2},
+			},
+			msg...,
+		)
 	}
 }
 
-// AssertGreaterOrEqual asserts that the first object is greater than or equal to the second.
+// GreaterOrEqual asserts that the first object is greater than or equal to the second.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertGreaterOrEqual(t, 5, 1)
-//	testza.AssertGreaterOrEqual(t, 10, -10)
+//	assert.AssertGreaterOrEqual(t, 5, 1)
+//	assert.AssertGreaterOrEqual(t, 10, -10)
 //
-// testza.AssertGreaterOrEqual(t, 10, 10)
-func AssertGreaterOrEqual(t testRunner, object1, object2 interface{}, msg ...interface{}) {
+// assert.AssertGreaterOrEqual(t, 10, 10)
+func GreaterOrEqual[T constraints.Ordered](t testRunner, object1, object2 T, msg ...interface{}) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
 
-	v1, err := strconv.ParseFloat(fmt.Sprint(object1), 64)
-	v2, err2 := strconv.ParseFloat(fmt.Sprint(object2), 64)
-
-	if err != nil || err2 != nil {
-		internal.Fail(t, "An error occurred while parsing the objects as numbers.", internal.NewObjectsUnknown(object1, object2), msg...)
-	}
-
-	if !(v1 >= v2) {
-		internal.Fail(t, "An object that !!should be greater!! than the second object is not.", internal.Objects{{Name: "Object 1", Data: object1}, {Name: "Should be greater than object 2", Data: object2}}, msg...)
+	if object1 < object2 {
+		internal.Fail(
+			t,
+			"An object that !!should be greater!! than the second object is not.",
+			internal.Objects{
+				{Name: "Object 1", Data: object1},
+				{Name: "Should be greater than object 2", Data: object2},
+			},
+			msg...,
+		)
 	}
 }
 
-// AssertLess asserts that the first object is less than the second.
+// Less asserts that the first object is less than the second.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertLess(t, 1, 5)
-//	testza.AssertLess(t, -10, 10)
-func AssertLess(t testRunner, object1, object2 any, msg ...any) {
+//	assert.AssertLess(t, 1, 5)
+//	assert.AssertLess(t, -10, 10)
+func Less[T constraints.Ordered](t testRunner, object1, object2 T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
 
-	v1, err := strconv.ParseFloat(fmt.Sprint(object1), 64)
-	v2, err2 := strconv.ParseFloat(fmt.Sprint(object2), 64)
-
-	if err != nil || err2 != nil {
-		internal.Fail(t, "An error occurred while parsing the objects as numbers.", internal.NewObjectsUnknown(object1, object2), msg...)
-	}
-
-	if !(v1 < v2) {
+	if !(object1 < object2) {
 		internal.Fail(t, "An object that !!should be less!! than the second object is not.", internal.Objects{
 			internal.NewObjectsSingleNamed("Should be less than", object1)[0],
 			internal.NewObjectsSingleNamed("Actual", object2)[0],
@@ -642,51 +638,44 @@ func AssertLess(t testRunner, object1, object2 any, msg ...any) {
 	}
 }
 
-// AssertLessOrEqual asserts that the first object is less than or equal to the second.
+// LessOrEqual asserts that the first object is less than or equal to the second.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertLessOrEqual(t, 1, 5)
-//	testza.AssertLessOrEqual(t, -10, 10)
-//	testza.AssertLessOrEqual(t, 1, 1)
-func AssertLessOrEqual(t testRunner, object1, object2 interface{}, msg ...interface{}) {
+//	assert.AssertLessOrEqual(t, 1, 5)
+//	assert.AssertLessOrEqual(t, -10, 10)
+//	assert.AssertLessOrEqual(t, 1, 1)
+func LessOrEqual[T constraints.Ordered](t testRunner, v1, v2 T, msg ...interface{}) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
 
-	v1, err := strconv.ParseFloat(fmt.Sprint(object1), 64)
-	v2, err2 := strconv.ParseFloat(fmt.Sprint(object2), 64)
-
-	if err != nil || err2 != nil {
-		internal.Fail(t, "An error occurred while parsing the objects as numbers.", internal.NewObjectsUnknown(object1, object2), msg...)
-	}
-
 	if !(v1 <= v2) {
 		internal.Fail(t, "An object that !!should be less or equal!! than the second object is not.", internal.Objects{
-			internal.NewObjectsSingleNamed("Should be less or equal to", object1)[0],
-			internal.NewObjectsSingleNamed("Actual", object2)[0],
+			internal.NewObjectsSingleNamed("Should be less or equal to", v1)[0],
+			internal.NewObjectsSingleNamed("Actual", v2)[0],
 		}, msg...)
 	}
 }
 
-// AssertTestFails asserts that a unit test fails.
+// TestFails asserts that a unit test fails.
 // A unit test fails if one of the following methods is called in the test function: Error, Errorf, Fail, FailNow, Fatal, Fatalf
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertTestFails(t, func(t testza.TestingPackageWithFailFunctions) {
-//		testza.AssertTrue(t, false)
+//	assert.AssertTestFails(t, func(t assert.TestingPackageWithFailFunctions) {
+//		assert.AssertTrue(t, false)
 //	}) // => Pass
 //
-//	testza.AssertTestFails(t, func(t testza.TestingPackageWithFailFunctions) {
+//	assert.AssertTestFails(t, func(t assert.TestingPackageWithFailFunctions) {
 //		// ...
 //		t.Fail() // Or any other failing method.
 //	}) // => Pass
-func AssertTestFails(t testRunner, test func(t TestingPackageWithFailFunctions), msg ...any) {
+func TestFails(t testRunner, test func(t TestingPackageWithFailFunctions), msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -699,7 +688,7 @@ func AssertTestFails(t testRunner, test func(t TestingPackageWithFailFunctions),
 	}
 }
 
-// AssertErrorIs asserts that target is inside the error chain of err.
+// ErrorIs asserts that target is inside the error chain of err.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
@@ -707,8 +696,8 @@ func AssertTestFails(t testRunner, test func(t TestingPackageWithFailFunctions),
 //
 //	var testErr = errors.New("hello world")
 //	var testErrWrapped = fmt.Errorf("test err: %w", testErr)
-//	testza.AssertErrorIs(t, testErrWrapped ,testErr)
-func AssertErrorIs(t testRunner, err, target error, msg ...any) {
+//	assert.AssertErrorIs(t, testErrWrapped ,testErr)
+func ErrorIs(t testRunner, err, target error, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -718,7 +707,7 @@ func AssertErrorIs(t testRunner, err, target error, msg ...any) {
 	}
 }
 
-// AssertNotErrorIs
+// NotErrorIs
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
@@ -727,8 +716,8 @@ func AssertErrorIs(t testRunner, err, target error, msg ...any) {
 //	var testErr = errors.New("hello world")
 //	var test2Err = errors.New("hello world 2")
 //	var testErrWrapped = fmt.Errorf("test err: %w", testErr)
-//	testza.AssertNotErrorIs(t, testErrWrapped, test2Err)
-func AssertNotErrorIs(t testRunner, err, target error, msg ...any) {
+//	assert.AssertNotErrorIs(t, testErrWrapped, test2Err)
+func NotErrorIs(t testRunner, err, target error, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -738,17 +727,17 @@ func AssertNotErrorIs(t testRunner, err, target error, msg ...any) {
 	}
 }
 
-// AssertLen asserts that the length of an object is equal to the given length.
+// Len asserts that the length of an object is equal to the given length.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertLen(t, "abc", 3)
-//	testza.AssertLen(t, "Assert", 6)
-//	testza.AssertLen(t, []int{1, 2, 1337, 25}, 4)
-//	testza.AssertLen(t, map[string]int{"asd": 1, "test": 1337}, 2)
-func AssertLen(t testRunner, object any, length int, msg ...any) {
+//	assert.AssertLen(t, "abc", 3)
+//	assert.AssertLen(t, "Assert", 6)
+//	assert.AssertLen(t, []int{1, 2, 1337, 25}, 4)
+//	assert.AssertLen(t, map[string]int{"asd": 1, "test": 1337}, 2)
+func Len(t testRunner, object any, length int, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -781,7 +770,7 @@ func AssertLen(t testRunner, object any, length int, msg ...any) {
 	}
 }
 
-// AssertIncreasing asserts that the values in a slice are increasing.
+// Increasing asserts that the values in a slice are increasing.
 // the test fails if the values are not in a slice or if the values are not comparable.
 //
 // Valid input kinds are: []int, []int8, []int16, []int32, []int64, []uint, []uint8, []uint16, []uint32, []uint64, []float32, []float64.
@@ -790,9 +779,9 @@ func AssertLen(t testRunner, object any, length int, msg ...any) {
 //
 // Example:
 //
-//	testza.AssertIncreasing(t, []int{1, 2, 137, 1000})
-//	testza.AssertIncreasing(t, []float32{-10.3, 0.1, 7, 13.5})
-func AssertIncreasing(t testRunner, object any, msg ...any) {
+//	assert.AssertIncreasing(t, []int{1, 2, 137, 1000})
+//	assert.AssertIncreasing(t, []float32{-10.3, 0.1, 7, 13.5})
+func Increasing(t testRunner, object any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -800,7 +789,7 @@ func AssertIncreasing(t testRunner, object any, msg ...any) {
 	internal.AssertCompareHelper(t, object, 1, msg...)
 }
 
-// AssertDecreasing asserts that the values in a slice are decreasing.
+// Decreasing asserts that the values in a slice are decreasing.
 // the test fails if the values are not in a slice or if the values are not comparable.
 //
 // Valid input kinds are: []int, []int8, []int16, []int32, []int64, []uint, []uint8, []uint16, []uint32, []uint64, []float32, []float64.
@@ -809,9 +798,9 @@ func AssertIncreasing(t testRunner, object any, msg ...any) {
 //
 // Example:
 //
-//	testza.AssertDecreasing(t, []int{1000, 137, 2, 1})
-//	testza.AssertDecreasing(t, []float32{13.5, 7, 0.1, -10.3})
-func AssertDecreasing(t testRunner, object any, msg ...any) {
+//	assert.AssertDecreasing(t, []int{1000, 137, 2, 1})
+//	assert.AssertDecreasing(t, []float32{13.5, 7, 0.1, -10.3})
+func Decreasing(t testRunner, object any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -819,14 +808,14 @@ func AssertDecreasing(t testRunner, object any, msg ...any) {
 	internal.AssertCompareHelper(t, object, -1, msg...)
 }
 
-// AssertRegexp asserts that a string matches a given regexp.
+// Regexp asserts that a string matches a given regexp.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertRegexp(t, "^a.*c$", "abc")
-func AssertRegexp(t testRunner, regex any, txt any, msg ...any) {
+//	assert.AssertRegexp(t, "^a.*c$", "abc")
+func Regexp(t testRunner, regex any, txt any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -834,14 +823,14 @@ func AssertRegexp(t testRunner, regex any, txt any, msg ...any) {
 	internal.AssertRegexpHelper(t, regex, txt, true, msg...)
 }
 
-// AssertNotRegexp asserts that a string does not match a given regexp.
+// NotRegexp asserts that a string does not match a given regexp.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotRegexp(t, "ab.*", "Hello, World!")
-func AssertNotRegexp(t testRunner, regex any, txt any, msg ...any) {
+//	assert.AssertNotRegexp(t, "ab.*", "Hello, World!")
+func NotRegexp(t testRunner, regex any, txt any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -849,15 +838,15 @@ func AssertNotRegexp(t testRunner, regex any, txt any, msg ...any) {
 	internal.AssertRegexpHelper(t, regex, txt, false, msg...)
 }
 
-// AssertFileExists asserts that a file exists.
+// FileExists asserts that a file exists.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertFileExists(t, "./test.txt")
-//	testza.AssertFileExists(t, "./config.yaml", "the config file is missing")
-func AssertFileExists(t testRunner, file string, msg ...any) {
+//	assert.AssertFileExists(t, "./test.txt")
+//	assert.AssertFileExists(t, "./config.yaml", "the config file is missing")
+func FileExists(t testRunner, file string, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -868,7 +857,7 @@ func AssertFileExists(t testRunner, file string, msg ...any) {
 	}
 }
 
-func AssertNoFileExists(t testRunner, file string, msg ...any) {
+func NoFileExists(t testRunner, file string, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -879,7 +868,7 @@ func AssertNoFileExists(t testRunner, file string, msg ...any) {
 	}
 }
 
-// AssertDirExists asserts that a directory exists.
+// DirExists asserts that a directory exists.
 // The test will pass when the directory exists, and it's visible to the current user.
 // The test will fail, if the path points to a file.
 //
@@ -887,8 +876,8 @@ func AssertNoFileExists(t testRunner, file string, msg ...any) {
 //
 // Example:
 //
-//	testza.AssertDirExists(t, "FolderName")
-func AssertDirExists(t testRunner, dir string, msg ...any) {
+//	assert.AssertDirExists(t, "FolderName")
+func DirExists(t testRunner, dir string, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -901,15 +890,15 @@ func AssertDirExists(t testRunner, dir string, msg ...any) {
 	}
 }
 
-// AssertNoDirExists asserts that a directory does not exists.
+// NoDirExists asserts that a directory does not exists.
 // The test will pass, if the path points to a file, as a directory with the same name, cannot exist.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNoDirExists(t, "FolderName")
-func AssertNoDirExists(t testRunner, dir string, msg ...any) {
+//	assert.AssertNoDirExists(t, "FolderName")
+func NoDirExists(t testRunner, dir string, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -923,15 +912,15 @@ func AssertNoDirExists(t testRunner, dir string, msg ...any) {
 	}
 }
 
-// AssertDirEmpty asserts that a directory is empty.
+// DirEmpty asserts that a directory is empty.
 // The test will pass when the directory is empty or does not exist.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertDirEmpty(t, "FolderName")
-func AssertDirEmpty(t testRunner, dir string, msg ...any) {
+//	assert.AssertDirEmpty(t, "FolderName")
+func DirEmpty(t testRunner, dir string, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -941,15 +930,15 @@ func AssertDirEmpty(t testRunner, dir string, msg ...any) {
 	}
 }
 
-// AssertDirNotEmpty asserts that a directory is not empty
+// DirNotEmpty asserts that a directory is not empty
 // The test will pass when the directory is not empty and will fail if the directory does not exist.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertDirNotEmpty(t, "FolderName")
-func AssertDirNotEmpty(t testRunner, dir string, msg ...any) {
+//	assert.AssertDirNotEmpty(t, "FolderName")
+func DirNotEmpty(t testRunner, dir string, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -959,22 +948,22 @@ func AssertDirNotEmpty(t testRunner, dir string, msg ...any) {
 	}
 }
 
-// AssertSameElements asserts that two slices contains same elements (including pointers).
+// SameElements asserts that two slices contains same elements (including pointers).
 // The order is irrelevant.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	 testza.AssertSameElements(t, []string{"Hello", "World"}, []string{"Hello", "World"})
-//	 testza.AssertSameElements(t, []int{1,2,3}, []int{1,2,3})
-//	 testza.AssertSameElements(t, []int{1,2}, []int{2,1})
+//	 assert.AssertSameElements(t, []string{"Hello", "World"}, []string{"Hello", "World"})
+//	 assert.AssertSameElements(t, []int{1,2,3}, []int{1,2,3})
+//	 assert.AssertSameElements(t, []int{1,2}, []int{2,1})
 //
 //	 type A struct {
 //		  a string
 //	 }
-//	 testza.AssertSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}})
-func AssertSameElements(t testRunner, expected any, actual any, msg ...any) {
+//	 assert.AssertSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}})
+func SameElements(t testRunner, expected any, actual any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -984,21 +973,21 @@ func AssertSameElements(t testRunner, expected any, actual any, msg ...any) {
 	}
 }
 
-// AssertNotSameElements asserts that two slices contains same elements (including pointers).
+// NotSameElements asserts that two slices contains same elements (including pointers).
 // The order is irrelevant.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	 testza.AssertNotSameElements(t, []string{"Hello", "World"}, []string{"Hello", "World", "World"})
-//	 testza.AssertNotSameElements(t, []int{1,2}, []int{1,2,3})
+//	 assert.AssertNotSameElements(t, []string{"Hello", "World"}, []string{"Hello", "World", "World"})
+//	 assert.AssertNotSameElements(t, []int{1,2}, []int{1,2,3})
 //
 //	 type A struct {
 //		  a string
 //	 }
-//	 testza.AssertNotSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}, {a: "D"}})
-func AssertNotSameElements(t testRunner, expected any, actual any, msg ...any) {
+//	 assert.AssertNotSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}, {a: "D"}})
+func NotSameElements(t testRunner, expected any, actual any, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1008,16 +997,16 @@ func AssertNotSameElements(t testRunner, expected any, actual any, msg ...any) {
 	}
 }
 
-// AssertSubset asserts that the second parameter is a subset of the list.
+// Subset asserts that the second parameter is a subset of the list.
 // The order is irrelevant.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertSubset(t, []int{1, 2, 3}, []int{1, 2})
-//	testza.AssertSubset(t, []string{"Hello", "World", "Test"}, []string{"Test", "World"})
-func AssertSubset(t testRunner, list any, subset any, msg ...any) {
+//	assert.AssertSubset(t, []int{1, 2, 3}, []int{1, 2})
+//	assert.AssertSubset(t, []string{"Hello", "World", "Test"}, []string{"Test", "World"})
+func Subset[T comparable](t testRunner, list []T, subset []T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1027,16 +1016,16 @@ func AssertSubset(t testRunner, list any, subset any, msg ...any) {
 	}
 }
 
-// AssertNoSubset asserts that the second parameter is not a subset of the list.
+// NoSubset asserts that the second parameter is not a subset of the list.
 // The order is irrelevant.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNoSubset(t, []int{1, 2, 3}, []int{1, 7})
-//	testza.AssertNoSubset(t, []string{"Hello", "World", "Test"}, []string{"Test", "John"})
-func AssertNoSubset(t testRunner, list any, subset any, msg ...any) {
+//	assert.AssertNoSubset(t, []int{1, 2, 3}, []int{1, 7})
+//	assert.AssertNoSubset(t, []string{"Hello", "World", "Test"}, []string{"Test", "John"})
+func NoSubset[T comparable](t testRunner, list []T, subset []T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1046,16 +1035,16 @@ func AssertNoSubset(t testRunner, list any, subset any, msg ...any) {
 	}
 }
 
-// AssertUnique asserts that the list contains only unique elements.
+// Unique asserts that the list contains only unique elements.
 // The order is irrelevant.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertUnique(t, []int{1, 2, 3})
-//	testza.AssertUnique(t, []string{"Hello", "World", "!"})
-func AssertUnique[elementType comparable](t testRunner, list []elementType, msg ...any) {
+//	assert.AssertUnique(t, []int{1, 2, 3})
+//	assert.AssertUnique(t, []string{"Hello", "World", "!"})
+func Unique[T comparable](t testRunner, list []T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1065,14 +1054,14 @@ func AssertUnique[elementType comparable](t testRunner, list []elementType, msg 
 	}
 }
 
-// AssertNotUnique asserts that the elements in a list are not unique.
+// NotUnique asserts that the elements in a list are not unique.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotUnique(t, []int{1, 2, 3, 3})
-func AssertNotUnique[elementType comparable](t testRunner, list []elementType, msg ...any) {
+//	assert.AssertNotUnique(t, []int{1, 2, 3, 3})
+func NotUnique[elementType comparable](t testRunner, list []elementType, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1082,14 +1071,14 @@ func AssertNotUnique[elementType comparable](t testRunner, list []elementType, m
 	}
 }
 
-// AssertInRange asserts that the value is in the range.
+// InRange asserts that the value is in the range.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertInRange(t, 5, 1, 10)
-func AssertInRange[T number](t testRunner, value T, min T, max T, msg ...any) {
+//	assert.AssertInRange(t, 5, 1, 10)
+func InRange[T number](t testRunner, value T, min T, max T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1103,14 +1092,14 @@ func AssertInRange[T number](t testRunner, value T, min T, max T, msg ...any) {
 	}
 }
 
-// AssertNotInRange asserts that the value is not in the range.
+// NotInRange asserts that the value is not in the range.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
 //
 // Example:
 //
-//	testza.AssertNotInRange(t, 5, 1, 10)
-func AssertNotInRange[T number](t testRunner, value T, min T, max T, msg ...any) {
+//	assert.AssertNotInRange(t, 5, 1, 10)
+func NotInRange[T number](t testRunner, value T, min T, max T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}

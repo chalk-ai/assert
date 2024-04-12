@@ -9,6 +9,7 @@ import (
 
 type testRunner interface {
 	Error(args ...any)
+	FailNow()
 }
 
 type helper interface {

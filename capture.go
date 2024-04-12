@@ -1,4 +1,4 @@
-package testza
+package assert
 
 import (
 	"fmt"
@@ -11,13 +11,13 @@ import (
 //
 // Example:
 //
-//	stdout, err := testza.CaptureStdout(func(w io.Writer) error {
+//	stdout, err := assert.CaptureStdout(func(w io.Writer) error {
 //		fmt.Println("Hello, World!")
 //		return nil
 //	})
 //
-//	testza.AssertNoError(t, err)
-//	testza.AssertEqual(t, "Hello, World!", stdout)
+//	assert.AssertNoError(t, err)
+//	assert.AssertEqual(t, "Hello, World!", stdout)
 func CaptureStdout(capture func(w io.Writer) error) (string, error) {
 	originalStdout := os.Stdout
 	r, w, err := os.Pipe()
@@ -53,14 +53,14 @@ func CaptureStdout(capture func(w io.Writer) error) (string, error) {
 //
 // Example:
 //
-//	stderr, err := testza.CaptureStderr(func(w io.Writer) error {
+//	stderr, err := assert.CaptureStderr(func(w io.Writer) error {
 //		_, err := fmt.Fprint(os.Stderr, "Hello, World!")
-//		testza.AssertNoError(t, err)
+//		assert.AssertNoError(t, err)
 //		return nil
 //	})
 //
-//	testza.AssertNoError(t, err)
-//	testza.AssertEqual(t, "Hello, World!", stderr)
+//	assert.AssertNoError(t, err)
+//	assert.AssertEqual(t, "Hello, World!", stderr)
 func CaptureStderr(capture func(w io.Writer) error) (string, error) {
 	originalStderr := os.Stderr
 	r, w, err := os.Pipe()
@@ -96,15 +96,15 @@ func CaptureStderr(capture func(w io.Writer) error) (string, error) {
 //
 // Example:
 //
-//	stdout, stderr, err := testza.CaptureStdoutAndStderr(func(stdoutWriter, stderrWriter io.Writer) error {
+//	stdout, stderr, err := assert.CaptureStdoutAndStderr(func(stdoutWriter, stderrWriter io.Writer) error {
 //		fmt.Fprint(os.Stdout, "Hello")
 //		fmt.Fprint(os.Stderr, "World")
 //		return nil
 //	})
 //
-//	testza.AssertNoError(t, err)
-//	testza.AssertEqual(t, "Hello", stdout)
-//	testza.AssertEqual(t, "World", stderr)
+//	assert.AssertNoError(t, err)
+//	assert.AssertEqual(t, "Hello", stdout)
+//	assert.AssertEqual(t, "World", stderr)
 func CaptureStdoutAndStderr(capture func(stdoutWriter, stderrWriter io.Writer) error) (stdout, stderr string, err error) {
 	originalStdout := os.Stdout
 	originalStderr := os.Stderr

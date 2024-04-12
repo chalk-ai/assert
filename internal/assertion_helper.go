@@ -269,7 +269,7 @@ func HasSameElements(expected any, actual any) bool {
 	return false
 }
 
-func IsSubset(t testRunner, list any, subset any) bool {
+func IsSubset[T comparable](t testRunner, list []T, subset []T) bool {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -278,18 +278,7 @@ func IsSubset(t testRunner, list any, subset any) bool {
 		return true
 	}
 
-	if !IsList(list) {
-		Fail(t, "The first argument is not a list.", NewObjectsSingleNamed("First argument", list))
-	}
-
-	if !IsList(subset) {
-		Fail(t, "The second argument is not a list.", NewObjectsSingleNamed("Second argument", subset))
-	}
-
-	subsetValue := reflect.ValueOf(subset)
-
-	for i := 0; i < subsetValue.Len(); i++ {
-		element := subsetValue.Index(i).Interface()
+	for _, element := range subset {
 		contains := DoesContain(list, element)
 
 		if !contains {

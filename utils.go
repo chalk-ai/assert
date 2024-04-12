@@ -1,4 +1,4 @@
-package testza
+package assert
 
 import (
 	"fmt"
@@ -10,6 +10,7 @@ import (
 
 type testRunner interface {
 	Error(args ...any)
+	FailNow()
 }
 
 // TestingPackageWithFailFunctions contains every function that fails a test in testing.T.

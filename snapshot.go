@@ -1,14 +1,14 @@
-package testza
+package assert
 
 import (
 	"fmt"
+	"github.com/chalk-ai/assert/internal"
 	"os"
 	"path"
 	"regexp"
 	"strconv"
 	"strings"
 
-	"github.com/MarvinJWendt/testza/internal"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/pterm/pterm"
 )
@@ -21,7 +21,7 @@ import (
 //
 // Example:
 //
-//	testza.SnapshotCreate(t.Name(), objectToBeSnapshotted)
+//	assert.SnapshotCreate(t.Name(), objectToBeSnapshotted)
 func SnapshotCreate(name string, snapshotObject any) error {
 	dir := getCurrentScriptDirectory() + "/testdata/snapshots/"
 	return snapshotCreateForDir(dir, name, snapshotObject)
@@ -34,7 +34,7 @@ func snapshotCreateForDir(dir string, name string, snapshotObject any) error {
 	}
 
 	dump := strings.ReplaceAll(createSnapshotText(snapshotObject), "\r\n", "\n")
-	err = os.WriteFile(path.Clean(dir+name+".testza"), []byte(dump), 0755)
+	err = os.WriteFile(path.Clean(dir+name+".assert"), []byte(dump), 0755)
 	if err != nil {
 		return fmt.Errorf("creating snapshot failed: %w", err)
 	}
@@ -49,8 +49,8 @@ func snapshotCreateForDir(dir string, name string, snapshotObject any) error {
 //
 // Example:
 //
-//	testza.SnapshotValidate(t, t.Name(), objectToBeValidated)
-//	testza.SnapshotValidate(t, t.Name(), objectToBeValidated, "Optional message")
+//	assert.SnapshotValidate(t, t.Name(), objectToBeValidated)
+//	assert.SnapshotValidate(t, t.Name(), objectToBeValidated, "Optional message")
 func SnapshotValidate(t testRunner, name string, actual any, msg ...any) error {
 	dir := getCurrentScriptDirectory() + "/testdata/snapshots/"
 	return snapshotValidateFromDir(dir, t, name, actual, msg...)
@@ -59,7 +59,7 @@ func SnapshotValidate(t testRunner, name string, actual any, msg ...any) error {
 var snapshotStringMatcher = regexp.MustCompile(`(?m)^\(.+?\)\s\(len=\d+\)\s(".+")$`)
 
 func snapshotValidateFromDir(dir string, t testRunner, name string, actual any, msg ...any) error {
-	snapshotPath := path.Clean(dir + name + ".testza")
+	snapshotPath := path.Clean(dir + name + ".assert")
 	snapshotContent, err := os.ReadFile(snapshotPath)
 	if err != nil {
 		return fmt.Errorf("validating snapshot failed: %w", err)
@@ -119,11 +119,11 @@ func snapshotValidateFromDir(dir string, t testRunner, name string, actual any, 
 //
 // Example:
 //
-//	testza.SnapshotCreateOrValidate(t, t.Name(), object)
-//	testza.SnapshotCreateOrValidate(t, t.Name(), object, "Optional Message")
+//	assert.SnapshotCreateOrValidate(t, t.Name(), object)
+//	assert.SnapshotCreateOrValidate(t, t.Name(), object, "Optional Message")
 func SnapshotCreateOrValidate(t testRunner, name string, object any, msg ...any) error {
 	dir := getCurrentScriptDirectory() + "/testdata/snapshots/"
-	snapshotPath := path.Clean(dir + name + ".testza")
+	snapshotPath := path.Clean(dir + name + ".assert")
 	if strings.Contains(name, "/") {
 		err := os.MkdirAll(path.Dir(snapshotPath), 0755)
 		if err != nil {

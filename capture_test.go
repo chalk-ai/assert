@@ -1,4 +1,4 @@
-package testza_test
+package assert_test
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"testing"
 
-	. "github.com/MarvinJWendt/testza"
+	. "github.com/chalk-ai/assert"
 )
 
 func TestCaptureStdout(t *testing.T) {
@@ -29,8 +29,8 @@ func TestCaptureStdout(t *testing.T) {
 	for i, tt := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			got, err := CaptureStdout(tt.args.capture)
-			AssertNil(t, err)
-			AssertEqual(t, got, tt.want)
+			Nil(t, err)
+			Equal(t, got, tt.want)
 		})
 	}
 }
@@ -54,8 +54,8 @@ func TestCaptureStderr(t *testing.T) {
 	for i, tt := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			got, err := CaptureStderr(tt.args.capture)
-			AssertNil(t, err)
-			AssertEqual(t, got, tt.want)
+			Nil(t, err)
+			Equal(t, got, tt.want)
 		})
 	}
 }
@@ -67,7 +67,7 @@ func TestCaptureStdoutAndStderr(t *testing.T) {
 		return nil
 	})
 
-	AssertEqual(t, stdout, "Hello")
-	AssertEqual(t, stderr, "World")
-	AssertNoError(t, err)
+	Equal(t, stdout, "Hello")
+	Equal(t, stderr, "World")
+	NoError(t, err)
 }

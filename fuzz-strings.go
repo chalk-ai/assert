@@ -1,4 +1,4 @@
-package testza
+package assert
 
 import (
 	"math/rand"
