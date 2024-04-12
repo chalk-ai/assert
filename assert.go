@@ -1130,3 +1130,12 @@ func NotInRange[T number](t testRunner, value T, min T, max T, msg ...any) {
 		internal.Fail(t, "The value is in range, but should not be.", internal.Objects{internal.NewObjectsSingleNamed("Value", value)[0], internal.NewObjectsSingleNamed("Min", min)[0], internal.NewObjectsSingleNamed("Max", max)[0]}, msg...)
 	}
 }
+
+func FailNow(t testRunner, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	internal.Fail(t, "The test should fail now.", internal.Objects{}, msg...)
+	t.FailNow()
+}
