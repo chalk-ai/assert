@@ -987,7 +987,7 @@ func SameElements(t testRunner, expected any, actual any, msg ...any) {
 //		  a string
 //	 }
 //	 assert.AssertNotSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}, {a: "D"}})
-func NotSameElements(t testRunner, expected any, actual any, msg ...any) {
+func NotSameElements[T comparable](t testRunner, expected []T, actual []T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
