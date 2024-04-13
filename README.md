@@ -1,6 +1,6 @@
 <h1 align="center">Assert</h1>
 
-Fork of [assert](https://github.com/chalk-ai/assert) with some modifications.
+Fork of the very nice [testza](https://github.com/MarvinJWendt/testza/) with some modifications.
 This version uses `comparable` from newer versions of golang and drops the `Assert` prefix from the functions.
 It also runs `t.FailNow()` for `assert.NoError`, and introduces json comparisons.
 
