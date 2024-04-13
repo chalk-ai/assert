@@ -4,6 +4,7 @@ import (
 	"atomicgo.dev/assert"
 	"errors"
 	"fmt"
+	jd "github.com/josephburnett/jd/lib"
 	"golang.org/x/exp/constraints"
 	"os"
 	"reflect"
@@ -1138,4 +1139,31 @@ func FailNow(t testRunner, msg ...any) {
 
 	internal.Fail(t, "The test should fail now.", internal.Objects{}, msg...)
 	t.FailNow()
+}
+
+func JSONEqual(t testRunner, expected string, actual string, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	a, _ := jd.ReadJsonString(expected)
+	b, _ := jd.ReadJsonString(actual)
+
+	d := a.Diff(b)
+
+	if len(d) > 0 {
+		internal.Fail(
+			t,
+			"The JSON objects are not equal.",
+			[]internal.Object{
+				{
+					Name:      "Difference",
+					NameStyle: pterm.NewStyle(pterm.FgYellow),
+					Data:      a.Diff(b).Render(),
+					Raw:       true,
+				},
+			},
+			msg...,
+		)
+	}
 }

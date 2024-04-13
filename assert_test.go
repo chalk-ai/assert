@@ -1129,9 +1129,11 @@ func TestAssertNotSameElements(t *testing.T) {
 	})
 
 	t.Run("Strings", func(t *testing.T) {
-		s := []string{"Hello", "World"}
-		ss := []string{"World", "Hello", "Again"}
-		NotSameElements(t, s, ss)
+		NotSameElements(
+			t,
+			[]string{"Hello", "World"},
+			[]string{"World", "Hello", "Again"},
+		)
 	})
 
 	t.Run("Integers", func(t *testing.T) {
@@ -1580,9 +1582,28 @@ func TestAssertInRange_fails(t *testing.T) {
 	})
 }
 
+func TestJsonEqual(t *testing.T) {
+	JSONEqual(t, `{"foo": "bar"}`, `{"foo": "bar"}`)
+}
+
+func TestJsonEqual_fails(t *testing.T) {
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		JSONEqual(t, `{"foo": "bar"}`, `{"foo": "baz"}`)
+	})
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		JSONEqual(t, `{"foo": "bar"}`, `{"foo": "baa", "bar": "foo"}`)
+	})
+}
+
 func TestAssertNotInRange(t *testing.T) {
 	NotInRange(t, 4, 1, 3)
 	NotInRange(t, 0, 1, 3)
+}
+
+func TestFailNow(t *testing.T) {
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		FailNow(t, "This is a test")
+	})
 }
 
 func TestAssertNotInRange_fails(t *testing.T) {
