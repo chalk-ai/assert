@@ -1,21 +1,13 @@
 <h1 align="center">Assert</h1>
 
-Fork of [testza](https://github.com/chalk-ai/assert) with some modifications.
-This version uses `comparable` from newer versions of golang, and drops the `Assert` prefix from the functions.
-It also runs `t.FailNow()` for `assert.NoError`.
+Fork of [assert](https://github.com/chalk-ai/assert) with some modifications.
+This version uses `comparable` from newer versions of golang and drops the `Assert` prefix from the functions.
+It also runs `t.FailNow()` for `assert.NoError`, and introduces json comparisons.
 
 <p align="center">
 
 <a href="https://github.com/chalk-ai/assert/releases">
 <img src="https://img.shields.io/github/v/release/chalk-ai/assert?style=flat-square" alt="Latest Release">
-</a>
-
-<a href="https://codecov.io/gh/chalk-ai/assert" target="_blank">
-<img src="https://img.shields.io/github/actions/workflow/status/chalk-ai/assert/go.yml?label=tests&style=flat-square" alt="Tests">
-</a>
-
-<a href="https://codecov.io/gh/chalk-ai/assert" target="_blank">
-<img src="https://img.shields.io/codecov/c/gh/chalk-ai/assert?color=magenta&logo=codecov&style=flat-square" alt="Coverage">
 </a>
 
 <a href="https://pkg.go.dev/github.com/chalk-ai/assert" target="_blank">
@@ -30,8 +22,6 @@ It also runs `t.FailNow()` for `assert.NoError`.
 <strong><a href="https://github.com/chalk-ai/assert#-installation">Get The Module</a></strong>
 |
 <strong><a href="https://github.com/chalk-ai/assert#-documentation" target="_blank">Documentation</a></strong>
-|
-<strong><a href="https://github.com/atomicgo/atomicgo/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a></strong>
 </p>
 
 ---
@@ -40,7 +30,7 @@ It also runs `t.FailNow()` for `assert.NoError`.
 
 <br/>
 
-## 📦 Installation
+## Installation
 
 ```console
 # Execute this command inside your project
@@ -49,16 +39,15 @@ go get github.com/chalk-ai/assert
 <br/>
 <br/>
 
-## 📝 Description
+## Description
 
-Testza is a full-featured testing framework for Go.
+assert is a full-featured testing framework for Go.
 It integrates with the default test runner, so you can use it with the standard `go test` tool.
-Testza contains easy to use methods, like assertions, output capturing, fuzzing, and much more.
+assert contains easy-to-use methods, like assertions, output capturing, fuzzing, and much more.
 
-The main goal of testza is to provide an easy and fun experience writing tests and providing a nice, user-friendly output.
-Even developers who never used testza, will get into it quickly.
+The main goal of `assert` is to provide an easy and fun experience writing tests and providing a nice, user-friendly output.
 
-## ⭐ Features
+## Features
 
 | Feature            | Description                                                                                                                                          |
 |--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -67,12 +56,12 @@ Even developers who never used testza, will get into it quickly.
 | Output Capture     | Capture and validate output written to the terminal.<br/>Perfect for CLI tools.                                                                      |
 | Snapshots          | Snapshot objects between test runs, to ensure a consistent behaviour.                                                                                |
 | Clean Output       | Clean and colorful output provides you the needed details in an easy-to-understand format.                                                           |
-| System Information | Testza prints information about the system on startup.<br/> You can quickly figure out what's wrong, when a user submits an issue.                   |
-| Well Documented    | Every function of testza is well documented and contains an example to make usage super easy.                                                        |
-| Customizable       | Testza features customizable settings, if you want to change something.                                                                              |
-| Test flags         | You can configure testza via flags too!<br/>That makes it super simple to change test runs, or output, without touching code!                        |
+| System Information | assert prints information about the system on startup.<br/> You can quickly figure out what's wrong, when a user submits an issue.                   |
+| Well Documented    | Every function of assert is well documented and contains an example to make usage super easy.                                                        |
+| Customizable       | assert features customizable settings, if you want to change something.                                                                              |
+| Test flags         | You can configure assert via flags too!<br/>That makes it super simple to change test runs, or output, without touching code!                        |
 
-## 🚀 Getting Started
+## Getting Started
 
 See the examples below for a quick introduction!
 
@@ -80,31 +69,31 @@ See the examples below for a quick introduction!
 // --- Some Examples ---
 
 // - Some assertions -
-testza.AssertTrue(t, true) // -> Pass
-testza.AssertNoError(t, err) // -> Pass
-testza.AssertEqual(t, object, object) // -> Pass
+assert.AssertTrue(t, true) // -> Pass
+assert.AssertNoError(t, err) // -> Pass
+assert.AssertEqual(t, object, object) // -> Pass
 // ...
 
 // - Testing console output -
 // Test the output of your CLI tool easily!
-terminalOutput, _ := testza.CaptureStdout(func(w io.Writer) error {fmt.Println("Hello"); return nil})
-testza.AssertEqual(t, terminalOutput, "Hello\n") // -> Pass
+terminalOutput, _ := assert.CaptureStdout(func(w io.Writer) error {fmt.Println("Hello"); return nil})
+asssert.AssertEqual(t, terminalOutput, "Hello\n") // -> Pass
 
 // - Fuzzing -
 // Testing a function that accepts email addresses as a parameter:
 
 // Testset of many different email addresses
-emailAddresses := testza.FuzzStringEmailAddresses()
+emailAddresses := assert.FuzzStringEmailAddresses()
 
 // Run a test for every string in the test set
-testza.FuzzStringRunTests(t, emailAddresses, func(t *testing.T, index int, str string) {
+assert.FuzzStringRunTests(t, emailAddresses, func(t *testing.T, index int, str string) {
   user, domain, err := internal.ParseEmailAddress(str) // Use your function
-  testza.AssertNoError(t, err) // Assert that your function does not return an error
-  testza.AssertNotZero(t, user) // Assert that the user is returned
-  testza.AssertNotZero(t, domain) // Assert that the domain is returned
+  assert.AssertNoError(t, err) // Assert that your function does not return an error
+  assert.AssertNotZero(t, user) // Assert that the user is returned
+  assert.AssertNotZero(t, domain) // Assert that the domain is returned
 })
 
-// And that's just a few examples of what you can do with Testza!
+// And that's just a few examples of what you can do with assert!
 ```
 
 ## 📚 Documentation
@@ -325,7 +314,7 @@ used.
 
 Example:
 
-    testza.AssertCompletesIn(t, 2 * time.Second, func() {
+    assert.AssertCompletesIn(t, 2 * time.Second, func() {
     	// some code that should take less than 2 seconds...
     }) // => PASS
 
@@ -343,9 +332,9 @@ used.
 
 Example:
 
-    testza.AssertContains(t, []int{1,2,3}, 2)
-    testza.AssertContains(t, []string{"Hello", "World"}, "World")
-    testza.AssertContains(t, "Hello, World!", "World")
+    assert.AssertContains(t, []int{1,2,3}, 2)
+    assert.AssertContains(t, []string{"Hello", "World"}, "World")
+    assert.AssertContains(t, "Hello, World!", "World")
 
 #### AssertDecreasing
 
@@ -364,8 +353,8 @@ used.
 
 Example:
 
-    testza.AssertDecreasing(t, []int{1000, 137, 2, 1})
-    testza.AssertDecreasing(t, []float32{13.5, 7, 0.1, -10.3})
+    assert.AssertDecreasing(t, []int{1000, 137, 2, 1})
+    assert.AssertDecreasing(t, []float32{13.5, 7, 0.1, -10.3})
 
 #### AssertDirEmpty
 
@@ -381,7 +370,7 @@ used.
 
 Example:
 
-    testza.AssertDirEmpty(t, "FolderName")
+    assert.AssertDirEmpty(t, "FolderName")
 
 #### AssertDirExists
 
@@ -398,7 +387,7 @@ used.
 
 Example:
 
-    testza.AssertDirExists(t, "FolderName")
+    assert.AssertDirExists(t, "FolderName")
 
 #### AssertDirNotEmpty
 
@@ -415,7 +404,7 @@ used.
 
 Example:
 
-    testza.AssertDirNotEmpty(t, "FolderName")
+    assert.AssertDirNotEmpty(t, "FolderName")
 
 #### AssertEqual
 
@@ -430,8 +419,8 @@ used.
 
 Example:
 
-    testza.AssertEqual(t, "Hello, World!", "Hello, World!")
-    testza.AssertEqual(t, true, true)
+    assert.AssertEqual(t, "Hello, World!", "Hello, World!")
+    assert.AssertEqual(t, true, true)
 
 #### AssertEqualValues
 
@@ -447,9 +436,9 @@ used.
 
 Example:
 
-    testza.AssertEqualValues(t, []string{"Hello", "World"}, []string{"Hello", "World"})
-    testza.AssertEqualValues(t, []int{1,2}, []int{1,2})
-    testza.AssertEqualValues(t, []int{1,2}, []int{2,1}) // FAILS (wrong order)
+    assert.AssertEqualValues(t, []string{"Hello", "World"}, []string{"Hello", "World"})
+    assert.AssertEqualValues(t, []int{1,2}, []int{1,2})
+    assert.AssertEqualValues(t, []int{1,2}, []int{2,1}) // FAILS (wrong order)
 
 Comparing struct values:
 
@@ -465,7 +454,7 @@ Comparing struct values:
       Gender: "male",
     }
 
-    testza.AssertEqualValues(t, person1, person2)
+    assert.AssertEqualValues(t, person1, person2)
 
 #### AssertErrorIs
 
@@ -482,7 +471,7 @@ Example:
 
     var testErr = errors.New("hello world")
     var testErrWrapped = fmt.Errorf("test err: %w", testErr)
-    testza.AssertErrorIs(t, testErrWrapped ,testErr)
+    assert.AssertErrorIs(t, testErrWrapped ,testErr)
 
 #### AssertFalse
 
@@ -497,10 +486,10 @@ used.
 
 Example:
 
-    testza.AssertFalse(t, false)
-    testza.AssertFalse(t, 1 == 2)
-    testza.AssertFalse(t, 2 != 2)
-    testza.AssertFalse(t, 1 > 5 && 4 < 0)
+    assert.AssertFalse(t, false)
+    assert.AssertFalse(t, 1 == 2)
+    assert.AssertFalse(t, 2 != 2)
+    assert.AssertFalse(t, 1 > 5 && 4 < 0)
 
 #### AssertFileExists
 
@@ -515,8 +504,8 @@ used.
 
 Example:
 
-    testza.AssertFileExists(t, "./test.txt")
-    testza.AssertFileExists(t, "./config.yaml", "the config file is missing")
+    assert.AssertFileExists(t, "./test.txt")
+    assert.AssertFileExists(t, "./config.yaml", "the config file is missing")
 
 #### AssertGreater
 
@@ -531,8 +520,8 @@ used.
 
 Example:
 
-    testza.AssertGreater(t, 5, 1)
-    testza.AssertGreater(t, 10, -10)
+    assert.AssertGreater(t, 5, 1)
+    assert.AssertGreater(t, 10, -10)
 
 #### AssertGreaterOrEqual
 
@@ -548,10 +537,10 @@ used.
 
 Example:
 
-    testza.AssertGreaterOrEqual(t, 5, 1)
-    testza.AssertGreaterOrEqual(t, 10, -10)
+    assert.AssertGreaterOrEqual(t, 5, 1)
+    assert.AssertGreaterOrEqual(t, 10, -10)
 
-testza.AssertGreaterOrEqual(t, 10, 10)
+assert.AssertGreaterOrEqual(t, 10, 10)
 
 #### AssertImplements
 
@@ -566,8 +555,8 @@ used.
 
 Example:
 
-    testza.AssertImplements(t, (*YourInterface)(nil), new(YourObject))
-    testza.AssertImplements(t, (*fmt.Stringer)(nil), new(types.Const)) => pass
+    assert.AssertImplements(t, (*YourInterface)(nil), new(YourObject))
+    assert.AssertImplements(t, (*fmt.Stringer)(nil), new(types.Const)) => pass
 
 #### AssertInRange
 
@@ -582,7 +571,7 @@ used.
 
 Example:
 
-    testza.AssertInRange(t, 5, 1, 10)
+    assert.AssertInRange(t, 5, 1, 10)
 
 #### AssertIncreasing
 
@@ -601,8 +590,8 @@ used.
 
 Example:
 
-    testza.AssertIncreasing(t, []int{1, 2, 137, 1000})
-    testza.AssertIncreasing(t, []float32{-10.3, 0.1, 7, 13.5})
+    assert.AssertIncreasing(t, []int{1, 2, 137, 1000})
+    assert.AssertIncreasing(t, []float32{-10.3, 0.1, 7, 13.5})
 
 #### AssertKindOf
 
@@ -617,11 +606,11 @@ used.
 
 Example:
 
-    testza.AssertKindOf(t, reflect.Slice, []int{1,2,3})
-    testza.AssertKindOf(t, reflect.Slice, []string{"Hello", "World"})
-    testza.AssertKindOf(t, reflect.Int, 1337)
-    testza.AssertKindOf(t, reflect.Bool, true)
-    testza.AssertKindOf(t, reflect.Map, map[string]bool{})
+    assert.AssertKindOf(t, reflect.Slice, []int{1,2,3})
+    assert.AssertKindOf(t, reflect.Slice, []string{"Hello", "World"})
+    assert.AssertKindOf(t, reflect.Int, 1337)
+    assert.AssertKindOf(t, reflect.Bool, true)
+    assert.AssertKindOf(t, reflect.Map, map[string]bool{})
 
 #### AssertLen
 
@@ -636,10 +625,10 @@ used.
 
 Example:
 
-    testza.AssertLen(t, "abc", 3)
-    testza.AssertLen(t, "Assert", 6)
-    testza.AssertLen(t, []int{1, 2, 1337, 25}, 4)
-    testza.AssertLen(t, map[string]int{"asd": 1, "test": 1337}, 2)
+    assert.AssertLen(t, "abc", 3)
+    assert.AssertLen(t, "Assert", 6)
+    assert.AssertLen(t, []int{1, 2, 1337, 25}, 4)
+    assert.AssertLen(t, map[string]int{"asd": 1, "test": 1337}, 2)
 
 #### AssertLess
 
@@ -654,8 +643,8 @@ used.
 
 Example:
 
-    testza.AssertLess(t, 1, 5)
-    testza.AssertLess(t, -10, 10)
+    assert.AssertLess(t, 1, 5)
+    assert.AssertLess(t, -10, 10)
 
 #### AssertLessOrEqual
 
@@ -671,9 +660,9 @@ used.
 
 Example:
 
-    testza.AssertLessOrEqual(t, 1, 5)
-    testza.AssertLessOrEqual(t, -10, 10)
-    testza.AssertLessOrEqual(t, 1, 1)
+    assert.AssertLessOrEqual(t, 1, 5)
+    assert.AssertLessOrEqual(t, -10, 10)
+    assert.AssertLessOrEqual(t, 1, 1)
 
 #### AssertNil
 
@@ -688,7 +677,7 @@ used.
 
 Example:
 
-    testza.AssertNil(t, nil)
+    assert.AssertNil(t, nil)
 
 #### AssertNoDirExists
 
@@ -705,7 +694,7 @@ used.
 
 Example:
 
-    testza.AssertNoDirExists(t, "FolderName")
+    assert.AssertNoDirExists(t, "FolderName")
 
 #### AssertNoError
 
@@ -721,7 +710,7 @@ used.
 Example:
 
     err := nil
-    testza.AssertNoError(t, err)
+    assert.AssertNoError(t, err)
 
 #### AssertNoFileExists
 
@@ -745,8 +734,8 @@ used.
 
 Example:
 
-    testza.AssertNoSubset(t, []int{1, 2, 3}, []int{1, 7})
-    testza.AssertNoSubset(t, []string{"Hello", "World", "Test"}, []string{"Test", "John"})
+    assert.AssertNoSubset(t, []int{1, 2, 3}, []int{1, 7})
+    assert.AssertNoSubset(t, []string{"Hello", "World", "Test"}, []string{"Test", "John"})
 
 #### AssertNotCompletesIn
 
@@ -767,7 +756,7 @@ used.
 
 Example:
 
-    testza.AssertNotCompletesIn(t, 2 * time.Second, func() {
+    assert.AssertNotCompletesIn(t, 2 * time.Second, func() {
     	// some code that should take more than 2 seconds...
     	time.Sleep(3 * time.Second)
     }) // => PASS
@@ -786,8 +775,8 @@ used.
 
 Example:
 
-    testza.AssertNotContains(t, []string{"Hello", "World"}, "Spaceship")
-    testza.AssertNotContains(t, "Hello, World!", "Spaceship")
+    assert.AssertNotContains(t, []string{"Hello", "World"}, "Spaceship")
+    assert.AssertNotContains(t, "Hello, World!", "Spaceship")
 
 #### AssertNotEqual
 
@@ -802,8 +791,8 @@ used.
 
 Example:
 
-    testza.AssertNotEqual(t, true, false)
-    testza.AssertNotEqual(t, "Hello", "World")
+    assert.AssertNotEqual(t, true, false)
+    assert.AssertNotEqual(t, "Hello", "World")
 
 #### AssertNotEqualValues
 
@@ -818,7 +807,7 @@ used.
 
 Example:
 
-    testza.AssertNotEqualValues(t, []int{1,2}, []int{3,4})
+    assert.AssertNotEqualValues(t, []int{1,2}, []int{3,4})
 
 Comparing struct values:
 
@@ -834,7 +823,7 @@ Comparing struct values:
       Gender: "female", // <-- CHANGED
     }
 
-    testza.AssertNotEqualValues(t, person1, person2)
+    assert.AssertNotEqualValues(t, person1, person2)
 
 #### AssertNotErrorIs
 
@@ -852,7 +841,7 @@ Example:
     var testErr = errors.New("hello world")
     var test2Err = errors.New("hello world 2")
     var testErrWrapped = fmt.Errorf("test err: %w", testErr)
-    testza.AssertNotErrorIs(t, testErrWrapped, test2Err)
+    assert.AssertNotErrorIs(t, testErrWrapped, test2Err)
 
 #### AssertNotImplements
 
@@ -867,8 +856,8 @@ used.
 
 Example:
 
-    testza.AssertNotImplements(t, (*YourInterface)(nil), new(YourObject))
-    testza.AssertNotImplements(t, (*fmt.Stringer)(nil), new(types.Const)) => fail, because types.Const does implement fmt.Stringer.
+    assert.AssertNotImplements(t, (*YourInterface)(nil), new(YourObject))
+    assert.AssertNotImplements(t, (*fmt.Stringer)(nil), new(types.Const)) => fail, because types.Const does implement fmt.Stringer.
 
 #### AssertNotInRange
 
@@ -883,7 +872,7 @@ used.
 
 Example:
 
-    testza.AssertNotInRange(t, 5, 1, 10)
+    assert.AssertNotInRange(t, 5, 1, 10)
 
 #### AssertNotKindOf
 
@@ -898,11 +887,11 @@ used.
 
 Example:
 
-    testza.AssertNotKindOf(t, reflect.Slice, "Hello, World")
-    testza.AssertNotKindOf(t, reflect.Slice, true)
-    testza.AssertNotKindOf(t, reflect.Int, 13.37)
-    testza.AssertNotKindOf(t, reflect.Bool, map[string]bool{})
-    testza.AssertNotKindOf(t, reflect.Map, false)
+    assert.AssertNotKindOf(t, reflect.Slice, "Hello, World")
+    assert.AssertNotKindOf(t, reflect.Slice, true)
+    assert.AssertNotKindOf(t, reflect.Int, 13.37)
+    assert.AssertNotKindOf(t, reflect.Bool, map[string]bool{})
+    assert.AssertNotKindOf(t, reflect.Map, false)
 
 #### AssertNotNil
 
@@ -917,9 +906,9 @@ used.
 
 Example:
 
-    testza.AssertNotNil(t, true)
-    testza.AssertNotNil(t, "Hello, World!")
-    testza.AssertNotNil(t, 0)
+    assert.AssertNotNil(t, true)
+    assert.AssertNotNil(t, "Hello, World!")
+    assert.AssertNotNil(t, 0)
 
 #### AssertNotNumeric
 
@@ -936,8 +925,8 @@ used.
 
 Example:
 
-    testza.AssertNotNumeric(t, true)
-    testza.AssertNotNumeric(t, "123")
+    assert.AssertNotNumeric(t, true)
+    assert.AssertNotNumeric(t, "123")
 
 #### AssertNotPanics
 
@@ -952,7 +941,7 @@ used.
 
 Example:
 
-    testza.AssertNotPanics(t, func() {
+    assert.AssertNotPanics(t, func() {
     	// some code that does not call a panic...
     }) // => PASS
 
@@ -969,7 +958,7 @@ used.
 
 Example:
 
-    testza.AssertNotRegexp(t, "ab.*", "Hello, World!")
+    assert.AssertNotRegexp(t, "ab.*", "Hello, World!")
 
 #### AssertNotSameElements
 
@@ -985,13 +974,13 @@ used.
 
 Example:
 
-     testza.AssertNotSameElements(t, []string{"Hello", "World"}, []string{"Hello", "World", "World"})
-     testza.AssertNotSameElements(t, []int{1,2}, []int{1,2,3})
+     assert.AssertNotSameElements(t, []string{"Hello", "World"}, []string{"Hello", "World", "World"})
+     assert.AssertNotSameElements(t, []int{1,2}, []int{1,2,3})
 
      type A struct {
     	  a string
      }
-     testza.AssertNotSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}, {a: "D"}})
+     assert.AssertNotSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}, {a: "D"}})
 
 #### AssertNotUnique
 
@@ -1006,7 +995,7 @@ used.
 
 Example:
 
-    testza.AssertNotUnique(t, []int{1, 2, 3, 3})
+    assert.AssertNotUnique(t, []int{1, 2, 3, 3})
 
 #### AssertNotZero
 
@@ -1021,9 +1010,9 @@ used.
 
 Example:
 
-    testza.AssertNotZero(t, 1337)
-    testza.AssertNotZero(t, true)
-    testza.AssertNotZero(t, "Hello, World")
+    assert.AssertNotZero(t, 1337)
+    assert.AssertNotZero(t, true)
+    assert.AssertNotZero(t, "Hello, World")
 
 #### AssertNumeric
 
@@ -1040,9 +1029,9 @@ used.
 
 Example:
 
-    testza.AssertNumeric(t, 123)
-    testza.AssertNumeric(t, 1.23)
-    testza.AssertNumeric(t, uint(123))
+    assert.AssertNumeric(t, 123)
+    assert.AssertNumeric(t, 1.23)
+    assert.AssertNumeric(t, uint(123))
 
 #### AssertPanics
 
@@ -1057,7 +1046,7 @@ used.
 
 Example:
 
-    testza.AssertPanics(t, func() {
+    assert.AssertPanics(t, func() {
     	// ...
     	panic("some panic")
     }) // => PASS
@@ -1075,7 +1064,7 @@ used.
 
 Example:
 
-    testza.AssertRegexp(t, "^a.*c$", "abc")
+    assert.AssertRegexp(t, "^a.*c$", "abc")
 
 #### AssertSameElements
 
@@ -1091,14 +1080,14 @@ used.
 
 Example:
 
-     testza.AssertSameElements(t, []string{"Hello", "World"}, []string{"Hello", "World"})
-     testza.AssertSameElements(t, []int{1,2,3}, []int{1,2,3})
-     testza.AssertSameElements(t, []int{1,2}, []int{2,1})
+     assert.AssertSameElements(t, []string{"Hello", "World"}, []string{"Hello", "World"})
+     assert.AssertSameElements(t, []int{1,2,3}, []int{1,2,3})
+     assert.AssertSameElements(t, []int{1,2}, []int{2,1})
 
      type A struct {
     	  a string
      }
-     testza.AssertSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}})
+     assert.AssertSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}})
 
 #### AssertSubset
 
@@ -1114,8 +1103,8 @@ used.
 
 Example:
 
-    testza.AssertSubset(t, []int{1, 2, 3}, []int{1, 2})
-    testza.AssertSubset(t, []string{"Hello", "World", "Test"}, []string{"Test", "World"})
+    assert.AssertSubset(t, []int{1, 2, 3}, []int{1, 2})
+    assert.AssertSubset(t, []string{"Hello", "World", "Test"}, []string{"Test", "World"})
 
 #### AssertTestFails
 
@@ -1132,11 +1121,11 @@ used.
 
 Example:
 
-    testza.AssertTestFails(t, func(t testza.TestingPackageWithFailFunctions) {
-    	testza.AssertTrue(t, false)
+    assert.AssertTestFails(t, func(t assert.TestingPackageWithFailFunctions) {
+    	assert.AssertTrue(t, false)
     }) // => Pass
 
-    testza.AssertTestFails(t, func(t testza.TestingPackageWithFailFunctions) {
+    assert.AssertTestFails(t, func(t assert.TestingPackageWithFailFunctions) {
     	// ...
     	t.Fail() // Or any other failing method.
     }) // => Pass
@@ -1154,10 +1143,10 @@ used.
 
 Example:
 
-    testza.AssertTrue(t, true)
-    testza.AssertTrue(t, 1 == 1)
-    testza.AssertTrue(t, 2 != 3)
-    testza.AssertTrue(t, 1 > 0 && 4 < 5)
+    assert.AssertTrue(t, true)
+    assert.AssertTrue(t, 1 == 1)
+    assert.AssertTrue(t, 2 != 3)
+    assert.AssertTrue(t, 1 > 0 && 4 < 5)
 
 #### AssertUnique
 
@@ -1173,8 +1162,8 @@ used.
 
 Example:
 
-    testza.AssertUnique(t, []int{1, 2, 3})
-    testza.AssertUnique(t, []string{"Hello", "World", "!"})
+    assert.AssertUnique(t, []int{1, 2, 3})
+    assert.AssertUnique(t, []string{"Hello", "World", "!"})
 
 #### AssertZero
 
@@ -1189,9 +1178,9 @@ used.
 
 Example:
 
-    testza.AssertZero(t, 0)
-    testza.AssertZero(t, false)
-    testza.AssertZero(t, "")
+    assert.AssertZero(t, 0)
+    assert.AssertZero(t, false)
+    assert.AssertZero(t, "")
 
 ### Capture
 
@@ -1207,14 +1196,14 @@ writes a string to the terminal.
 
 Example:
 
-    stderr, err := testza.CaptureStderr(func(w io.Writer) error {
+    stderr, err := assert.CaptureStderr(func(w io.Writer) error {
     	_, err := fmt.Fprint(os.Stderr, "Hello, World!")
-    	testza.AssertNoError(t, err)
+    	assert.AssertNoError(t, err)
     	return nil
     })
 
-    testza.AssertNoError(t, err)
-    testza.AssertEqual(t, "Hello, World!", stderr)
+    assert.AssertNoError(t, err)
+    assert.AssertEqual(t, "Hello, World!", stderr)
 
 #### CaptureStdout
 
@@ -1228,13 +1217,13 @@ writes a string to the terminal.
 
 Example:
 
-    stdout, err := testza.CaptureStdout(func(w io.Writer) error {
+    stdout, err := assert.CaptureStdout(func(w io.Writer) error {
     	fmt.Println("Hello, World!")
     	return nil
     })
 
-    testza.AssertNoError(t, err)
-    testza.AssertEqual(t, "Hello, World!", stdout)
+    assert.AssertNoError(t, err)
+    assert.AssertEqual(t, "Hello, World!", stdout)
 
 #### CaptureStdoutAndStderr
 
@@ -1248,15 +1237,15 @@ functions writes a string to the terminal.
 
 Example:
 
-    stdout, stderr, err := testza.CaptureStdoutAndStderr(func(stdoutWriter, stderrWriter io.Writer) error {
+    stdout, stderr, err := assert.CaptureStdoutAndStderr(func(stdoutWriter, stderrWriter io.Writer) error {
     	fmt.Fprint(os.Stdout, "Hello")
     	fmt.Fprint(os.Stderr, "World")
     	return nil
     })
 
-    testza.AssertNoError(t, err)
-    testza.AssertEqual(t, "Hello", stdout)
-    testza.AssertEqual(t, "World", stderr)
+    assert.AssertNoError(t, err)
+    assert.AssertEqual(t, "Hello", stdout)
+    assert.AssertEqual(t, "World", stderr)
 
 ### Fuzz Booleans
 
@@ -1442,7 +1431,7 @@ FuzzUtilDistinctSet returns a set with removed duplicates.
 
 Example:
 
-    uniqueSet := testza.FuzzUtilDistinctSet([]string{"A", "C", "A", "B", "A", "B", "C"})
+    uniqueSet := assert.FuzzUtilDistinctSet([]string{"A", "C", "A", "B", "A", "B", "C"})
     // uniqueSet => []string{"A", "C", "B"}
 
 #### FuzzUtilLimitSet
@@ -1455,7 +1444,7 @@ FuzzUtilLimitSet returns a random sample of a test set with a maximal size.
 
 Example:
 
-    limitedSet := testza.FuzzUtilLimitSet(testza.FuzzStringFull(), 10)
+    limitedSet := assert.FuzzUtilLimitSet(assert.FuzzStringFull(), 10)
 
 #### FuzzUtilMergeSets
 
@@ -1468,7 +1457,7 @@ have the same type.
 
 Example:
 
-    mergedSet := testza.FuzzUtilMergeSets(testza.FuzzIntGenerateRandomNegative(3, 0), testza.FuzzIntGenerateRandomPositive(2, 0))
+    mergedSet := assert.FuzzUtilMergeSets(assert.FuzzIntGenerateRandomNegative(3, 0), assert.FuzzIntGenerateRandomPositive(2, 0))
 
 #### FuzzUtilModifySet
 
@@ -1480,7 +1469,7 @@ FuzzUtilModifySet returns a modified version of a test set.
 
 Example:
 
-     modifiedSet := testza.FuzzUtilModifySet(testza.FuzzIntFull(), func(i int, value int) int {
+     modifiedSet := assert.FuzzUtilModifySet(assert.FuzzIntFull(), func(i int, value int) int {
     		return i * 2 // double every value in the test set
     	})
 
@@ -1497,10 +1486,10 @@ handling and enables you to test against hundreds of cases easily.
 
 Example:
 
-    testza.FuzzUtilRunTests(t, testza.FuzzStringEmailAddresses(), func(t *testing.T, index int, emailAddress string) {
+    assert.FuzzUtilRunTests(t, assert.FuzzStringEmailAddresses(), func(t *testing.T, index int, emailAddress string) {
     	// Test logic
     	// err := YourFunction(emailAddress)
-    	// testza.AssertNoError(t, err)
+    	// assert.AssertNoError(t, err)
     	// ...
     })
 
@@ -1513,7 +1502,7 @@ func GetColorsEnabled() bool
 ```
 
 GetColorsEnabled returns current value of ColorsEnabled setting.
-ColorsEnabled controls if testza should print colored output.
+ColorsEnabled controls if assert should print colored output.
 
 #### GetDiffContextLines
 
@@ -1561,17 +1550,17 @@ printed.
 func SetColorsEnabled(enabled bool)
 ```
 
-SetColorsEnabled controls if testza should print colored output. You should
+SetColorsEnabled controls if assert should print colored output. You should
 use this in the init() method of the package, which contains your tests.
 
 > This setting can also be set by the command line flag
---testza.disable-color.
+--assert.disable-color.
 
 Example:
 
     init() {
-      testza.SetColorsEnabled(false) // Disable colored output
-      testza.SetColorsEnabled(true)  // Enable colored output
+      assert.SetColorsEnabled(false) // Disable colored output
+      assert.SetColorsEnabled(true)  // Enable colored output
     }
 
 #### SetDiffContextLines
@@ -1585,13 +1574,13 @@ line. If set to -1 it will show full diff. You should use this in the init()
 method of the package, which contains your tests.
 
 > This setting can also be set by the command line flag
---testza.diff-context-lines.
+--assert.diff-context-lines.
 
 Example:
 
     init() {
-      testza.SetDiffContextLines(-1) // Show all diff lines
-      testza.SetDiffContextLines(3)  // Show 3 lines around every changed line
+      assert.SetDiffContextLines(-1) // Show all diff lines
+      assert.SetDiffContextLines(3)  // Show 3 lines around every changed line
     }
 
 #### SetLineNumbersEnabled
@@ -1605,13 +1594,13 @@ failing tests. You should use this in the init() method of the package,
 which contains your tests.
 
 > This setting can also be set by the command line flag
---testza.disable-line-numbers.
+--assert.disable-line-numbers.
 
 Example:
 
     init() {
-      testza.SetLineNumbersEnabled(false) // Disable line numbers
-      testza.SetLineNumbersEnabled(true)  // Enable line numbers
+      assert.SetLineNumbersEnabled(false) // Disable line numbers
+      assert.SetLineNumbersEnabled(true)  // Enable line numbers
     }
 
 #### SetRandomSeed
@@ -1620,19 +1609,19 @@ Example:
 func SetRandomSeed(seed int64)
 ```
 
-SetRandomSeed sets the seed for the random generator used in testza.
+SetRandomSeed sets the seed for the random generator used in assert.
 Using the same seed will result in the same random sequences each time and
 guarantee a reproducible test run. Use this setting, if you want a 100%
 deterministic test. You should use this in the init() method of the package,
 which contains your tests.
 
-> This setting can also be set by the command line flag --testza.seed.
+> This setting can also be set by the command line flag --assert.seed.
 
 Example:
 
     init() {
-      testza.SetRandomSeed(1337) // Set the seed to 1337
-      testza.SetRandomSeed(time.Now().UnixNano()) // Set the seed back to the current time (default | non-deterministic)
+      assert.SetRandomSeed(1337) // Set the seed to 1337
+      assert.SetRandomSeed(time.Now().UnixNano()) // Set the seed back to the current time (default | non-deterministic)
     }
 
 #### SetShowStartupMessage
@@ -1646,13 +1635,13 @@ You should use this in the init() method of the package, which contains your
 tests.
 
 > This setting can also be set by the command line flag
---testza.disable-startup-message.
+--assert.disable-startup-message.
 
 Example:
 
     init() {
-      testza.SetShowStartupMessage(false) // Disable the startup message
-      testza.SetShowStartupMessage(true)  // Enable the startup message
+      assert.SetShowStartupMessage(false) // Disable the startup message
+      assert.SetShowStartupMessage(true)  // Enable the startup message
     }
 
 ### Snapshot
@@ -1673,7 +1662,7 @@ operating systems.
 
 Example:
 
-    testza.SnapshotCreate(t.Name(), objectToBeSnapshotted)
+    assert.SnapshotCreate(t.Name(), objectToBeSnapshotted)
 
 #### SnapshotCreateOrValidate
 
@@ -1694,8 +1683,8 @@ operating systems.
 
 Example:
 
-    testza.SnapshotCreateOrValidate(t, t.Name(), object)
-    testza.SnapshotCreateOrValidate(t, t.Name(), object, "Optional Message")
+    assert.SnapshotCreateOrValidate(t, t.Name(), object)
+    assert.SnapshotCreateOrValidate(t, t.Name(), object, "Optional Message")
 
 #### SnapshotValidate
 
@@ -1711,8 +1700,8 @@ operating systems.
 
 Example:
 
-    testza.SnapshotValidate(t, t.Name(), objectToBeValidated)
-    testza.SnapshotValidate(t, t.Name(), objectToBeValidated, "Optional message")
+    assert.SnapshotValidate(t, t.Name(), objectToBeValidated)
+    assert.SnapshotValidate(t, t.Name(), objectToBeValidated, "Optional message")
 
 
 <!-- docs:end -->
