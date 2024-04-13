@@ -25,8 +25,9 @@ It also runs `t.FailNow()` for `assert.NoError`, and introduces json comparisons
 </p>
 
 ---
+<br/>
 
-<img align="right" height="400" alt="Screenshot of an example test message" src="https://user-images.githubusercontent.com/31022056/161153895-e772bc61-b751-407f-b526-8f6a66d8f8d5.png" />
+<img height="400" alt="Screenshot of an example test message" src="https://user-images.githubusercontent.com/31022056/161153895-e772bc61-b751-407f-b526-8f6a66d8f8d5.png" />
 
 <br/>
 
