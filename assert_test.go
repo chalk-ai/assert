@@ -1595,6 +1595,45 @@ func TestJsonEqual_fails(t *testing.T) {
 	})
 }
 
+func TestHasPrefix(t *testing.T) {
+	HasPrefix(t, "foobar", "foo")
+}
+
+func TestHasPrefix_fails(t *testing.T) {
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		HasPrefix(t, "foobar", "bar")
+	})
+}
+
+func TestHasSuffix(t *testing.T) {
+	HasSuffix(t, "foobar", "bar")
+}
+
+func TestHasSuffix_fails(t *testing.T) {
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		HasSuffix(t, "foobar", "foo")
+	})
+}
+
+func TestStringsEqual(t *testing.T) {
+	type IdType string
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		Equal(t, IdType("foobar"), "foobar")
+	})
+	EqualAsString(t, IdType("foobar"), "foobar")
+}
+
+func TestStringsEqual_fails(t *testing.T) {
+	type IdType string
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		EqualAsString(t, "foobar", "bar")
+	})
+
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		EqualAsString(t, IdType("foobar"), "bar")
+	})
+}
+
 func TestAssertNotInRange(t *testing.T) {
 	NotInRange(t, 4, 1, 3)
 	NotInRange(t, 0, 1, 3)

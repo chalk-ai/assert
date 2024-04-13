@@ -8,6 +8,7 @@ import (
 	"golang.org/x/exp/constraints"
 	"os"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/pterm/pterm"
@@ -1097,7 +1098,7 @@ func NotUnique[elementType comparable](t testRunner, list []elementType, msg ...
 // Example:
 //
 //	assert.AssertInRange(t, 5, 1, 10)
-func InRange[T number](t testRunner, value T, min T, max T, msg ...any) {
+func InRange[T constraints.Ordered](t testRunner, value T, min T, max T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1118,17 +1119,34 @@ func InRange[T number](t testRunner, value T, min T, max T, msg ...any) {
 // Example:
 //
 //	assert.AssertNotInRange(t, 5, 1, 10)
-func NotInRange[T number](t testRunner, value T, min T, max T, msg ...any) {
+func NotInRange[T constraints.Ordered](t testRunner, value T, min T, max T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
 
 	if min >= max {
-		internal.Fail(t, "The minimum value is greater than or equal to the maximum value.", internal.Objects{internal.NewObjectsSingleNamed("Min", min)[0], internal.NewObjectsSingleNamed("Max", max)[0]}, msg...)
+		internal.Fail(
+			t,
+			"The minimum value is greater than or equal to the maximum value.",
+			internal.Objects{
+				internal.NewObjectsSingleNamed("Min", min)[0],
+				internal.NewObjectsSingleNamed("Max", max)[0],
+			},
+			msg...,
+		)
 	}
 
 	if value >= min && value <= max {
-		internal.Fail(t, "The value is in range, but should not be.", internal.Objects{internal.NewObjectsSingleNamed("Value", value)[0], internal.NewObjectsSingleNamed("Min", min)[0], internal.NewObjectsSingleNamed("Max", max)[0]}, msg...)
+		internal.Fail(
+			t,
+			"The value is in range, but should not be.",
+			internal.Objects{
+				internal.NewObjectsSingleNamed("Value", value)[0],
+				internal.NewObjectsSingleNamed("Min", min)[0],
+				internal.NewObjectsSingleNamed("Max", max)[0],
+			},
+			msg...,
+		)
 	}
 }
 
@@ -1166,4 +1184,42 @@ func JSONEqual(t testRunner, expected string, actual string, msg ...any) {
 			msg...,
 		)
 	}
+}
+
+func HasPrefix(t testRunner, s string, prefix string, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	if !strings.HasPrefix(s, prefix) {
+		internal.Fail(
+			t,
+			fmt.Sprintf("The string does not have the prefix '%s'.", prefix),
+			internal.NewObjectsSingleNamed(fmt.Sprintf("Should have the prefix '%s'", prefix), s),
+			msg...,
+		)
+	}
+}
+
+func HasSuffix(t testRunner, s string, suffix string, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	if !strings.HasSuffix(s, suffix) {
+		internal.Fail(
+			t,
+			fmt.Sprintf("The string does not have the suffix '%s'.", suffix),
+			internal.NewObjectsSingleNamed(fmt.Sprintf("Should have the suffix '%s'", suffix), s),
+			msg...,
+		)
+	}
+}
+
+func EqualAsString(t testRunner, expected any, actual any, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	Equal(t, fmt.Sprint(expected), fmt.Sprint(actual), msg...)
 }
