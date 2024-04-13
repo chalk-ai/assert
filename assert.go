@@ -981,7 +981,7 @@ func DirNotEmpty(t testRunner, dir string, msg ...any) {
 //		  a string
 //	 }
 //	 assert.AssertSameElements(t, []*A{{a: "A"}, {a: "B"}, {a: "C"}}, []*A{{a: "A"}, {a: "B"}, {a: "C"}})
-func SameElements(t testRunner, expected any, actual any, msg ...any) {
+func SameElements[T comparable](t testRunner, expected []T, actual []T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}

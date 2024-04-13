@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"atomicgo.dev/assert"
 	"bytes"
 	"errors"
 	"fmt"
@@ -210,74 +209,7 @@ func AssertDirEmptyHelper(t testRunner, dir string) bool {
 	return errors.Is(err, io.EOF)
 }
 
-func IsList(list any) bool {
-	kind := reflect.TypeOf(list).Kind()
-	if kind != reflect.Array && kind != reflect.Slice {
-		return false
-	}
-
-	return true
-}
-
-func HasSameElements(expected any, actual any) bool {
-	if assert.Nil(expected) || assert.Nil(actual) {
-		return expected == actual
-	}
-
-	if !IsList(expected) || !IsList(actual) {
-		return false
-	}
-
-	expectedValue := reflect.ValueOf(expected)
-	actualValue := reflect.ValueOf(actual)
-
-	expectedLen := expectedValue.Len()
-	actualLen := actualValue.Len()
-
-	visited := make([]bool, actualLen)
-
-	var extraA, extraB []any
-	for i := 0; i < expectedLen; i++ {
-		element := expectedValue.Index(i).Interface()
-		found := false
-		for j := 0; j < actualLen; j++ {
-			if visited[j] {
-				continue
-			}
-			if IsEqual(actualValue.Index(j).Interface(), element) {
-				visited[j] = true
-				found = true
-				break
-			}
-		}
-		if !found {
-			extraA = append(extraA, element)
-		}
-	}
-
-	for j := 0; j < actualLen; j++ {
-		if visited[j] {
-			continue
-		}
-		extraB = append(extraB, actualValue.Index(j).Interface())
-	}
-
-	if len(extraA) == 0 && len(extraB) == 0 {
-		return true
-	}
-
-	return false
-}
-
-func IsSubset[T comparable](t testRunner, list []T, subset []T) bool {
-	if test, ok := t.(helper); ok {
-		test.Helper()
-	}
-
-	if assert.Nil(subset) {
-		return true
-	}
-
+func isSubset[T comparable](list []T, subset []T) bool {
 	for _, element := range subset {
 		contains := DoesContain(list, element)
 
@@ -285,6 +217,21 @@ func IsSubset[T comparable](t testRunner, list []T, subset []T) bool {
 			return false
 		}
 	}
-
 	return true
+}
+
+func HasSameElements[T comparable](expected []T, actual []T) bool {
+	return isSubset(expected, actual) && isSubset(actual, expected)
+}
+
+func IsSubset[T comparable](t testRunner, list []T, subset []T) bool {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	if subset == nil {
+		return true
+	}
+
+	return isSubset(list, subset)
 }

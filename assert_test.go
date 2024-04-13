@@ -1040,7 +1040,8 @@ func TestAssertSameElements(t *testing.T) {
 	})
 
 	t.Run("Nil and Nil are equal", func(t *testing.T) {
-		SameElements(t, nil, nil)
+		var x []string
+		SameElements(t, x, nil)
 	})
 
 	t.Run("Same arrays to same struct are equal", func(t *testing.T) {
@@ -1081,14 +1082,6 @@ func TestAssertSameElements(t *testing.T) {
 }
 
 func TestAssertSameElementsFails(t *testing.T) {
-	t.Run("Not an array", func(t *testing.T) {
-		FuzzUtilRunTests(t, FuzzStringFull(), func(t *testing.T, index int, str string) {
-			TestFails(t, func(t TestingPackageWithFailFunctions) {
-				SameElements(t, str, str)
-			})
-		})
-	})
-
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
 		ss := make([]assertionTestStruct, 0)
