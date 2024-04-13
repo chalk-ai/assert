@@ -1654,3 +1654,18 @@ func TestAssertNotInRange_fails(t *testing.T) {
 		InRange(t, 0, 1, 3)
 	})
 }
+
+func TestEqualLength(t *testing.T) {
+	EqualLength(t, []int{1, 2, 3}, []int{4, 5, 6})
+	EqualLength(t, []string{"foo", "bar"}, []string{"baz", "foo"})
+}
+
+func TestEqualLength_fails(t *testing.T) {
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		EqualLength(t, []int{1, 2, 3}, []int{4, 5, 6, 7})
+	})
+
+	TestFails(t, func(t TestingPackageWithFailFunctions) {
+		EqualLength(t, []string{"foo", "bar"}, []string{"baz"})
+	})
+}

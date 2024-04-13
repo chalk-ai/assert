@@ -1223,3 +1223,21 @@ func EqualAsString(t testRunner, expected any, actual any, msg ...any) {
 
 	Equal(t, fmt.Sprint(expected), fmt.Sprint(actual), msg...)
 }
+
+func EqualLength[T any, U any](t testRunner, expected []T, actual []U, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	if len(expected) != len(actual) {
+		internal.Fail(
+			t,
+			fmt.Sprintf("Expected length (%d) does not match actual length (%d).", len(expected), len(actual)),
+			internal.Objects{
+				internal.NewObjectsSingleNamed("Expected", expected)[0],
+				internal.NewObjectsSingleNamed("Actual", actual)[0],
+			},
+			msg...,
+		)
+	}
+}
