@@ -16,13 +16,13 @@ func NewDiffObject(expected, actual any, raw ...bool) Object {
 	return Object{
 		Name:      "Difference",
 		NameStyle: pterm.NewStyle(pterm.FgYellow),
-		Data:      GetDifference(expected, actual, raw...),
+		Data:      getDifference(expected, actual, raw...),
 		Raw:       true,
 	}
 }
 
-// GetDifference returns the diff for two projects.
-func GetDifference(a, b any, raw ...bool) string {
+// getDifference returns the diff for two projects.
+func getDifference(a, b any, raw ...bool) string {
 	dmp := diffmatchpatch.New()
 
 	var aString, bString string
@@ -58,7 +58,7 @@ func GetDifference(a, b any, raw ...bool) string {
 		CounterWidth:    int(math.Log10(maxNewlines)) + 1,
 	}
 
-	return d.ProcessDiffs(diffs)
+	return d.processDiffs(diffs)
 }
 
 type textLine struct {
@@ -90,17 +90,17 @@ type diffPrinter struct {
 	CounterWidth int
 }
 
-func (d *diffPrinter) ProcessDiffs(diffs []diffmatchpatch.Diff) string {
+func (d *diffPrinter) processDiffs(diffs []diffmatchpatch.Diff) string {
 	for _, diff := range diffs {
 		for _, char := range diff.Text {
 			if char == '\n' {
-				d.FlushDiff(diff.Type, true)
-				d.FlushLine(diff.Type)
+				d.flushDiff(diff.Type, true)
+				d.flushLine(diff.Type)
 			} else {
 				d.DiffBuffer.WriteRune(char)
 			}
 		}
-		d.FlushDiff(diff.Type, false)
+		d.flushDiff(diff.Type, false)
 	}
 
 	lastOp := diffmatchpatch.DiffEqual
@@ -108,11 +108,11 @@ func (d *diffPrinter) ProcessDiffs(diffs []diffmatchpatch.Diff) string {
 		lastOp = diffs[len(diffs)-1].Type
 	}
 
-	d.FlushLine(lastOp)
-	return d.Finalize(lastOp)
+	d.flushLine(lastOp)
+	return d.finalize(lastOp)
 }
 
-func (d *diffPrinter) FlushDiff(operation diffmatchpatch.Operation, newLine bool) {
+func (d *diffPrinter) flushDiff(operation diffmatchpatch.Operation, newLine bool) {
 	if d.DiffBuffer.Len() > 0 {
 		if operation == diffmatchpatch.DiffDelete {
 			d.ExpectedLine.WriteString(pterm.BgDarkGray.Sprint(pterm.Bold.Sprint(d.DiffBuffer.String())))
@@ -136,7 +136,7 @@ func (d *diffPrinter) FlushDiff(operation diffmatchpatch.Operation, newLine bool
 	d.DiffBuffer.Reset()
 }
 
-func (d *diffPrinter) FlushLine(operation diffmatchpatch.Operation) {
+func (d *diffPrinter) flushLine(operation diffmatchpatch.Operation) {
 	if d.ExpectedLine.String() == d.ActualLine.String() {
 		if operation == diffmatchpatch.DiffEqual {
 			d.Text = append(d.Text, d.ExpectedGroupBuffer...)
@@ -201,12 +201,12 @@ func (d *diffPrinter) FlushLine(operation diffmatchpatch.Operation) {
 	d.DiffBuffer.Reset()
 }
 
-func (d *diffPrinter) Finalize(operation diffmatchpatch.Operation) string {
+func (d *diffPrinter) finalize(operation diffmatchpatch.Operation) string {
 	d.ExpectedFlushable = true
 	d.ActualFlushable = true
 
 	if d.ExpectedLine.Len() > 0 || d.ActualLine.Len() > 0 {
-		d.FlushLine(operation)
+		d.flushLine(operation)
 	}
 
 	d.Text = append(d.Text, d.ExpectedGroupBuffer...)

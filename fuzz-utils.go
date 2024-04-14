@@ -41,7 +41,7 @@ func FuzzUtilRunTests[setType any](t testRunner, testSet []setType, testFunc fun
 
 	test := internal.GetTest(t)
 	if test == nil {
-		t.Error(internal.ErrCanNotRunIfNotBuiltinTesting)
+		t.Error("This test is only supported on types of *testing.T")
 		return
 	}
 

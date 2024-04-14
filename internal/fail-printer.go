@@ -8,7 +8,7 @@ import (
 	"github.com/pterm/pterm"
 )
 
-var Highlight = pterm.NewStyle(pterm.FgLightRed).Sprint
+var highlight = pterm.NewStyle(pterm.FgLightRed).Sprint
 
 type Object struct {
 	Name      string
@@ -97,7 +97,7 @@ func ModifyWrappedText(text, wrappingString string, modifier func(wrappedText st
 
 func FailS(message string, objects Objects, args ...any) string {
 	message = ModifyWrappedText(message, "!!", func(wrappedText string) string {
-		return Highlight(wrappedText)
+		return highlight(wrappedText)
 	})
 
 	if len(args) > 0 {
