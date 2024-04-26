@@ -549,17 +549,11 @@ func NoError(t testRunner, err error, msg ...any) {
 	if err != nil {
 		internal.Fail(t, "An error that !!should be nil!! is not nil.", internal.Objects{
 			{
-				Name:      "Error message",
+				Name:      "Error",
 				NameStyle: pterm.NewStyle(pterm.FgLightRed, pterm.Bold),
-				Data:      fmt.Sprintf("%q\n", err.Error()),
+				Data:      fmt.Sprintf("%+v\n", err),
 				DataStyle: pterm.NewStyle(pterm.FgRed),
 				Raw:       true,
-			},
-			{
-				Name:      "Error object",
-				NameStyle: pterm.NewStyle(pterm.FgLightRed, pterm.Bold),
-				Data:      err,
-				DataStyle: pterm.NewStyle(pterm.FgRed),
 			}}, msg...)
 		t.FailNow()
 	}

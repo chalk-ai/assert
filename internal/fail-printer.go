@@ -44,12 +44,14 @@ func NewObjectsExpectedActualWithDiff(expected, actual any) Objects {
 			NameStyle: pterm.NewStyle(pterm.FgLightGreen),
 			Data:      expected,
 			DataStyle: pterm.NewStyle(pterm.FgGreen),
+			Raw:       true,
 		},
 		{
 			Name:      "Actual",
 			NameStyle: pterm.NewStyle(pterm.FgLightRed),
 			Data:      actual,
 			DataStyle: pterm.NewStyle(pterm.FgRed),
+			Raw:       true,
 		},
 		NewDiffObject(expected, actual),
 	}
