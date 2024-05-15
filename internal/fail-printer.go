@@ -97,6 +97,8 @@ func ModifyWrappedText(text, wrappingString string, modifier func(wrappedText st
 	return strings.ReplaceAll(res, wrappingString, "")
 }
 
+const maxMessageLength = 10_000
+
 func FailS(message string, objects Objects, args ...any) string {
 	message = ModifyWrappedText(message, "!!", func(wrappedText string) string {
 		return highlight(wrappedText)
@@ -145,6 +147,9 @@ func FailS(message string, objects Objects, args ...any) string {
 		}
 	}
 	message = "\n" + newMessage + "\n"
+	if len(message) > maxMessageLength {
+		message = message[0:maxMessageLength]
+	}
 
 	return message
 }
