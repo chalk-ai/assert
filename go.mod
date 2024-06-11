@@ -6,7 +6,7 @@ require (
 	atomicgo.dev/assert v0.0.2
 	github.com/davecgh/go-spew v1.1.1
 	github.com/josephburnett/jd v1.8.1
-	github.com/klauspost/cpuid/v2 v2.2.7
+	github.com/klauspost/cpuid/v2 v2.2.8
 	github.com/lucsky/cuid v1.2.1
 	github.com/pterm/pterm v0.12.79
 	github.com/sergi/go-diff v1.3.1
