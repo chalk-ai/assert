@@ -5,12 +5,12 @@ go 1.22.0
 require (
 	atomicgo.dev/assert v0.0.2
 	github.com/davecgh/go-spew v1.1.1
-	github.com/josephburnett/jd v1.8.1
+	github.com/josephburnett/jd v1.9.0
 	github.com/klauspost/cpuid/v2 v2.2.7
 	github.com/lucsky/cuid v1.2.1
 	github.com/pterm/pterm v0.12.79
 	github.com/sergi/go-diff v1.3.1
-	golang.org/x/exp v0.0.0-20220909182711-5c715a9e8561
+	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56
 )
 
 require (
