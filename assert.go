@@ -197,6 +197,40 @@ func Equal(t testRunner, expected any, actual any, msg ...any) {
 	}
 }
 
+func EqualDedent(t testRunner, expected string, actual string, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	expected, actual = Dedent(expected), Dedent(actual)
+
+	if !assert.Equal(expected, actual) {
+		internal.Fail(
+			t,
+			"Two strings that !!should be equal!!, are not equal.",
+			internal.NewObjectsExpectedActualWithDiff(expected, actual),
+			msg...,
+		)
+	}
+}
+
+func EqualDedentStrip(t testRunner, expected string, actual string, msg ...any) {
+	if test, ok := t.(helper); ok {
+		test.Helper()
+	}
+
+	expected, actual = strings.TrimSpace(Dedent(expected)), strings.TrimSpace(Dedent(actual))
+
+	if !assert.Equal(expected, actual) {
+		internal.Fail(
+			t,
+			"Two strings that !!should be equal!!, are not equal.",
+			internal.NewObjectsExpectedActualWithDiff(expected, actual),
+			msg...,
+		)
+	}
+}
+
 // NotEqual asserts that two objects are not equal.
 //
 // When using a custom message, the same formatting as with fmt.Sprintf() is used.
