@@ -59,7 +59,7 @@ func parseGoDoc() {
 	var insideFunctionBlock bool
 	var lastFunc Function
 
-	for _, line := range strings.Split(goDoc, "\n") {
+	for line := range strings.SplitSeq(goDoc, "\n") {
 		if strings.HasPrefix(line, "func") {
 			insideFunctionBlock = true
 			Functions = append(Functions, lastFunc)
@@ -84,11 +84,11 @@ func parseGoDoc() {
 		var re = regexp.MustCompile(`(?m)func (?P<name>[a-zA-Z0-9]*)`)
 		Functions[i].Name = regexGroupsToMap(re, f.Head)["name"]
 
-		var newBody string
-		for _, v := range strings.Split(f.Body, "\n") {
-			newBody += strings.TrimPrefix(v, "    ") + "\n"
+		var newBody strings.Builder
+		for v := range strings.SplitSeq(f.Body, "\n") {
+			newBody.WriteString(strings.TrimPrefix(v, "    ") + "\n")
 		}
-		Functions[i].Body = strings.TrimRight(newBody, "\n")
+		Functions[i].Body = strings.TrimRight(newBody.String(), "\n")
 	}
 
 	pterm.Debug.Printfln("Found %d functions:", len(Functions))

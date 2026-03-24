@@ -7,7 +7,7 @@ import (
 
 // FuzzIntFull returns a combination of every integer testset and some random integers (positive and negative).
 func FuzzIntFull() (ints []int) {
-	for i := 0; i < 50; i++ {
+	for i := range 50 {
 		ints = append(ints,
 			FuzzIntGenerateRandomPositive(1, i*1000)[0],
 			FuzzIntGenerateRandomNegative(1, i*1000*-1)[0],
@@ -18,7 +18,7 @@ func FuzzIntFull() (ints []int) {
 
 // FuzzIntGenerateRandomRange generates random integers with a range of min to max.
 func FuzzIntGenerateRandomRange(count, min, max int) (ints []int) {
-	for i := 0; i < count; i++ {
+	for range count {
 		ints = append(ints, rand.Intn(max-min)+min)
 	}
 

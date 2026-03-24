@@ -7,7 +7,7 @@ import (
 
 // FuzzFloat64Full returns a combination of every float64 testset and some random float64s (positive and negative).
 func FuzzFloat64Full() (floats []float64) {
-	for i := 0; i < 50; i++ {
+	for i := range 50 {
 		floats = append(floats,
 			FuzzFloat64GenerateRandomPositive(1, float64(i*1000))[0],
 			FuzzFloat64GenerateRandomNegative(1, float64(i*1000*-1))[0],
@@ -20,7 +20,7 @@ func FuzzFloat64Full() (floats []float64) {
 // If the maximum is 0, or below, the maximum will be set to math.MaxInt64.
 func FuzzFloat64GenerateRandomRange(count int, min, max float64) []float64 {
 	var floats []float64
-	for i := 0; i < count; i++ {
+	for range count {
 		floats = append(floats, min+rand.Float64()*(max-min))
 	}
 

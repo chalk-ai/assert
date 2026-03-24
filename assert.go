@@ -1,11 +1,12 @@
 package assert
 
 import (
+	"cmp"
+
 	"atomicgo.dev/assert"
 	"errors"
 	"fmt"
 	jd "github.com/josephburnett/jd/lib"
-	"golang.org/x/exp/constraints"
 	"os"
 	"reflect"
 	"strings"
@@ -619,7 +620,7 @@ func Error(t testRunner, err error, msg ...any) {
 //
 //	assert.AssertGreater(t, 5, 1)
 //	assert.AssertGreater(t, 10, -10)
-func Greater[T constraints.Ordered](t testRunner, object1, object2 T, msg ...any) {
+func Greater[T cmp.Ordered](t testRunner, object1, object2 T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -647,7 +648,7 @@ func Greater[T constraints.Ordered](t testRunner, object1, object2 T, msg ...any
 //	assert.AssertGreaterOrEqual(t, 10, -10)
 //
 // assert.AssertGreaterOrEqual(t, 10, 10)
-func GreaterOrEqual[T constraints.Ordered](t testRunner, object1, object2 T, msg ...interface{}) {
+func GreaterOrEqual[T cmp.Ordered](t testRunner, object1, object2 T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -673,7 +674,7 @@ func GreaterOrEqual[T constraints.Ordered](t testRunner, object1, object2 T, msg
 //
 //	assert.AssertLess(t, 1, 5)
 //	assert.AssertLess(t, -10, 10)
-func Less[T constraints.Ordered](t testRunner, object1, object2 T, msg ...any) {
+func Less[T cmp.Ordered](t testRunner, object1, object2 T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -695,7 +696,7 @@ func Less[T constraints.Ordered](t testRunner, object1, object2 T, msg ...any) {
 //	assert.AssertLessOrEqual(t, 1, 5)
 //	assert.AssertLessOrEqual(t, -10, 10)
 //	assert.AssertLessOrEqual(t, 1, 1)
-func LessOrEqual[T constraints.Ordered](t testRunner, v1, v2 T, msg ...interface{}) {
+func LessOrEqual[T cmp.Ordered](t testRunner, v1, v2 T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1126,7 +1127,7 @@ func NotUnique[elementType comparable](t testRunner, list []elementType, msg ...
 // Example:
 //
 //	assert.AssertInRange(t, 5, 1, 10)
-func InRange[T constraints.Ordered](t testRunner, value T, min T, max T, msg ...any) {
+func InRange[T cmp.Ordered](t testRunner, value T, min T, max T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
@@ -1147,7 +1148,7 @@ func InRange[T constraints.Ordered](t testRunner, value T, min T, max T, msg ...
 // Example:
 //
 //	assert.AssertNotInRange(t, 5, 1, 10)
-func NotInRange[T constraints.Ordered](t testRunner, value T, min T, max T, msg ...any) {
+func NotInRange[T cmp.Ordered](t testRunner, value T, min T, max T, msg ...any) {
 	if test, ok := t.(helper); ok {
 		test.Helper()
 	}
