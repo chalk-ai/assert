@@ -1,9 +1,5 @@
 package assert
 
-import (
-	"math/rand"
-)
-
 // FuzzStringEmpty returns a test set with a single empty string.
 func FuzzStringEmpty() []string {
 	return []string{""}
@@ -111,7 +107,7 @@ func FuzzStringFull() (ret []string) {
 	ret = append(ret, FuzzStringNumeric()...)
 	ret = append(ret, FuzzStringLong()...)
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		ret = append(ret, FuzzStringGenerateRandom(1, i)...)
 	}
 
@@ -122,11 +118,11 @@ func FuzzStringFull() (ret []string) {
 func FuzzStringGenerateRandom(count, length int) (result []string) {
 	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
-	for i := 0; i < count; i++ {
+	for range count {
 		str := make([]rune, length)
 
 		for i := range str {
-			str[i] = letters[rand.Intn(len(letters))]
+			str[i] = letters[randInstance.Intn(len(letters))]
 		}
 		result = append(result, string(str))
 	}

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"go/types"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"reflect"
@@ -209,7 +208,7 @@ func TestAssertNotKindOf_fails(t *testing.T) {
 func TestAssertNumeric(t *testing.T) {
 	var numbers []any
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		numbers = append(numbers,
 			i,
 			int8(i),
@@ -251,7 +250,7 @@ func TestAssertNumeric_fails(t *testing.T) {
 func TestAssertNotNumeric_fails(t *testing.T) {
 	var numbers []any
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		numbers = append(numbers,
 			i,
 			int8(i),
@@ -355,7 +354,7 @@ func TestAssertEqual(t *testing.T) {
 
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			s := generateStruct()
 			testEqual(t, s, s)
 		}
@@ -373,7 +372,7 @@ func TestAssertEqual_fails(t *testing.T) {
 
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			s := generateStruct()
 			s2 := s
 			s2.Name += " addon"
@@ -400,7 +399,7 @@ func TestAssertNotEqual(t *testing.T) {
 
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			s := generateStruct()
 			s2 := s
 			s2.Name += " addon"
@@ -448,7 +447,7 @@ func TestAssertNotEqual_fails(t *testing.T) {
 
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			s := generateStruct()
 			TestFails(t, func(t TestingPackageWithFailFunctions) {
 				NotEqual(t, s, s)
@@ -544,8 +543,8 @@ func TestAssertNotImplements_fails(t *testing.T) {
 func TestAssertContains(t *testing.T) {
 	tests := []struct {
 		name     string
-		obj      interface{}
-		contains interface{}
+		obj      any
+		contains any
 	}{
 		{name: "String Slice", obj: []string{"Hello", "World", "!"}, contains: "World"},
 		{name: "Int Slice", obj: []int{1, 2, 3, 4, 5, 6, 7, 8}, contains: 4},
@@ -561,8 +560,8 @@ func TestAssertContains(t *testing.T) {
 func TestAssertContains_fails(t *testing.T) {
 	tests := []struct {
 		name     string
-		obj      interface{}
-		contains interface{}
+		obj      any
+		contains any
 	}{
 		{name: "String Slice", obj: []string{"Hello", "World", "!"}, contains: "asdasdasd"},
 		{name: "Int Slice", obj: []int{1, 2, 3, 4, 5, 6, 7, 8}, contains: 1337},
@@ -1059,7 +1058,7 @@ func TestAssertSameElements(t *testing.T) {
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
 		ss := make([]assertionTestStruct, 0)
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			s := generateStruct()
 			ss = append(ss, s)
 		}
@@ -1085,7 +1084,7 @@ func TestAssertSameElementsFails(t *testing.T) {
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
 		ss := make([]assertionTestStruct, 0)
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			s := generateStruct()
 			ss = append(ss, s)
 		}
@@ -1118,7 +1117,7 @@ func TestAssertNotSameElements(t *testing.T) {
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
 		ss := make([]assertionTestStruct, 0)
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			s := generateStruct()
 			ss = append(ss, s)
 		}
@@ -1147,7 +1146,7 @@ func TestAssertNotSameElementsFails(t *testing.T) {
 	t.Run("Structs", func(t *testing.T) {
 		// Test ten random structs for equality.
 		ss := make([]assertionTestStruct, 0)
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			s := generateStruct()
 			ss = append(ss, s)
 		}
@@ -1312,7 +1311,7 @@ func TestAssertNoDirExists_fail(t *testing.T) {
 }
 
 func TestAssertDirEmpty(t *testing.T) {
-	tempdir, _ := ioutil.TempDir("testdata", "temp")
+	tempdir, _ := os.MkdirTemp("testdata", "temp")
 	DirEmpty(t, tempdir)
 	defer os.RemoveAll(tempdir)
 }
@@ -1329,7 +1328,7 @@ func TestAssertDirNotEmpty(t *testing.T) {
 }
 
 func TestAssertDirNotEmpty_fail(t *testing.T) {
-	tempdir, _ := ioutil.TempDir("testdata", "temp")
+	tempdir, _ := os.MkdirTemp("testdata", "temp")
 	TestFails(t, func(t TestingPackageWithFailFunctions) {
 		DirNotEmpty(t, tempdir)
 	})
@@ -1498,7 +1497,7 @@ Proin puvinar feliss consectetur codiementum tincidunt.`
 	t.Run("failed test many matching lines", func(t *testing.T) {
 		dataExpected := make([]string, 50)
 		dataActual := make([]string, 50)
-		for i := 0; i < len(dataExpected); i++ {
+		for i := range dataExpected {
 			dataExpected[i] = strconv.Itoa(i)
 			dataActual[i] = dataExpected[i]
 		}

@@ -57,7 +57,7 @@ func TestFuzzUtilModifySet(t *testing.T) {
 }
 
 func TestFuzzUtilLimitSet(t *testing.T) {
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		t.Run(fmt.Sprintf("String (Limit=%d)", i), func(t *testing.T) {
 			Len(t, FuzzUtilLimitSet(FuzzStringFull(), i), i)
 		})
@@ -85,13 +85,13 @@ func TestFuzzUtilDistinctSet(t *testing.T) {
 
 // region FuzzString
 func TestFuzzStringGenerateRandom(t *testing.T) {
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		t.Run(fmt.Sprintf("Length=%d", i), func(t *testing.T) {
 			Len(t, FuzzStringGenerateRandom(1, i)[0], i)
 		})
 	}
 
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		t.Run(fmt.Sprintf("Count=%d", i), func(t *testing.T) {
 			Len(t, FuzzStringGenerateRandom(i, 5), i)
 		})
@@ -166,7 +166,7 @@ func TestFuzzBoolRunTests(t *testing.T) {
 
 // region FuzzInt
 func TestFuzzIntGenerateRandom(t *testing.T) {
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		t.Run("GenerateRandomPositive generates positive numbers only", func(t *testing.T) {
 			Greater(t, FuzzIntGenerateRandomPositive(1, 100)[0], 0)
 		})
@@ -182,7 +182,7 @@ func TestFuzzIntFull(t *testing.T) {
 }
 
 func TestFuzzIntGenerateRandomRange(t *testing.T) {
-	for i := 0; i < 1000; i++ {
+	for i := range 1000 {
 		generated := FuzzIntGenerateRandomRange(1, i*10, i*10+10)[0]
 		GreaterOrEqual(t, generated, i*10)
 		LessOrEqual(t, generated, i*10+10)
@@ -203,7 +203,7 @@ func TestFuzzFloat64RunTests(t *testing.T) {
 }
 
 func TestFuzzFloat64GenerateRandomNegative(t *testing.T) {
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		n := FuzzFloat64GenerateRandomNegative(1, 0)[0]
 		t.Run(fmt.Sprintf("%v", n), func(t *testing.T) {
 			Less(t, n, 0)
@@ -212,7 +212,7 @@ func TestFuzzFloat64GenerateRandomNegative(t *testing.T) {
 }
 
 func TestFuzzFloat64GenerateRandomPositive(t *testing.T) {
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		n := FuzzFloat64GenerateRandomPositive(1, 0)[0]
 		t.Run(fmt.Sprintf("%v", n), func(t *testing.T) {
 			Greater(t, n, 0)
@@ -221,7 +221,7 @@ func TestFuzzFloat64GenerateRandomPositive(t *testing.T) {
 }
 
 func TestFuzzFloat64GenerateRandomRange(t *testing.T) {
-	for i := 0; i < 1000; i++ {
+	for i := range 1000 {
 		generated := FuzzFloat64GenerateRandomRange(1, float64(i*10), float64(i*10+10))[0]
 		GreaterOrEqual(t, generated, float64(i*10))
 		LessOrEqual(t, generated, float64(i*10+10))
