@@ -16,6 +16,7 @@ import (
 )
 
 var randomSeed int64
+var randInstance = rand.New(rand.NewSource(time.Now().UnixNano()))
 var showStartupMessage = false
 
 func init() {
@@ -69,7 +70,7 @@ func init() {
 
 		if randomSeed == 0 {
 			randomSeed = time.Now().UnixNano()
-			rand.Seed(randomSeed)
+			randInstance = rand.New(rand.NewSource(randomSeed))
 		}
 
 		if showStartupMessage {
@@ -153,7 +154,7 @@ func SetRandomSeed(seed int64) {
 	defer initSync.Unlock()
 
 	randomSeed = seed
-	rand.Seed(seed)
+	randInstance = rand.New(rand.NewSource(seed))
 }
 
 // GetRandomSeed returns current value of the random seed setting.
